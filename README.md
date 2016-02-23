@@ -1,10 +1,21 @@
-Chartify
-========
+ng-d3
+=====
 
 
 Notes et piste de reflections pour la construction d'une directive angular pour wrapper D3.js
 
-[TOC]
+- [Modéle des données](#)
+    - [Chord Diagramme](#)
+    - [Bubble Chart](#)
+    - [Sunburst Partition](#)
+    - [Streamgraph](#)
+    - [Autres visualisations envisagés](#)
+- [features](#)
+    - [All charts](#)
+    - [Chord diagram](#)
+    - [Surbunst / Bubble](#)
+- [Pistes de réfléctions](#)
+- [Ressources](#)
 
 
 ## Modéle des données
@@ -29,7 +40,7 @@ var matrix = [
 ```javascript
 var data = {
     name : "flare",
-    
+
 };
 ```
 *todo : <s>Réfléchir à un mode de données empirique possible comparable au bubble chart.</s>*
@@ -55,7 +66,7 @@ var data = {
         },
         {...},
     ]
-}; 
+};
 ```
 
 ### [Sunburst Partition](http://bl.ocks.org/mbostock/4063423)
