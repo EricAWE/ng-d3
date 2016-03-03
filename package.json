@@ -16,6 +16,16 @@
   "author": "Eric Berlin",
   "license": "ISC",
   "dependencies": {
-    "d3": "^3.5.11"
+    "d3": "^3.5.11",
+    "d3.chart": "^0.3.0",
+    "lodash": "^4.5.1"
+  },
+  "devDependencies": {
+    "eslint-config-awe": "git+ssh://git@github.com/AgenceAWE/eslint.git",
+    "gulp": "^3.9.1",
+    "gulp-browserify": "^0.5.1",
+    "gulp-load-plugins": "^1.2.0",
+    "webpack": "^1.12.14",
+    "webpack-stream": "^3.1.0"
   }
 }

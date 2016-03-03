@@ -1,0 +1,15 @@
+{
+    "extends": [
+        "./node_modules/eslint-config-awe/base.js",
+        "./node_modules/eslint-config-awe/angular.js"
+    ],
+    "globals": {
+        "_": true,
+        "d3": true,
+        "require": true,
+        "module": true
+    },
+    "rules": {
+        "max-statements": [2, 30]
+    }
+}

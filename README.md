@@ -4,18 +4,7 @@ ng-d3
 
 Notes et piste de reflections pour la construction d'une directive angular pour wrapper D3.js
 
-- [Modéle des données](#)
-    - [Chord Diagramme](#)
-    - [Bubble Chart](#)
-    - [Sunburst Partition](#)
-    - [Streamgraph](#)
-    - [Autres visualisations envisagés](#)
-- [features](#)
-    - [All charts](#)
-    - [Chord diagram](#)
-    - [Surbunst / Bubble](#)
-- [Pistes de réfléctions](#)
-- [Ressources](#)
+[TOC]
 
 
 ## Modéle des données
@@ -144,5 +133,5 @@ var options = {
 
 ## Ressources
 - [article] [bocoup](https://bocoup.com/weblog/reusability-with-d3) : Exploring Reusability with D3.js
-- [article] [Mike Bostock]((https://bost.ocks.org/mike/chart/)) : Towards Reusable Charts
+- [article] [Mike Bostock](https://bost.ocks.org/mike/chart/) : Towards Reusable Charts
 - [library] [misoproject](http://misoproject.com/d3-chart/tutorials/definechart) : Librairie permettant de faire des charts réutilisables
