@@ -1,15 +1,18 @@
-/* eslint-disable */
 module.exports = function(ngD3) {
     'use strict';
 
-    var _format;
-    var _sunburst;
-    var _radius;
-    var _svg;
-    var _width;
-    var _height;
-    var _data;
-    var _arc;
+    var pvt = {
+        sunburst: null,
+        radius: null,
+        svg: null,
+        width: null,
+        height: null,
+        data: null,
+        arc: null,
+        totalSize: null,
+        explanation: null,
+        percentage: null
+    };
 
     var self = {
         fill: d3.scale.category20c(),
@@ -21,6 +24,7 @@ module.exports = function(ngD3) {
         render: render,
         clear: clear
     };
+    var legend;
 
     return self;
 
@@ -34,17 +38,21 @@ module.exports = function(ngD3) {
         self.options = _options;
         self.container = self.options.container;
 
-        _svg = d3.select(self.container).append('svg');
+        pvt.svg = d3.select(self.container)
+            .append('svg')
+            .attr('class', 'ngD3-sunburst');
 
-        _sunburst = d3.layout.partition()
+        pvt.sunburst = d3.layout.partition()
             .sort(null)
-            .value(function(d) { return 1; });
+            .value(function(d) { return d.size; });
 
         self.width(self.options.width || 800);
         self.height(self.options.height || 500);
         self.fill = d3.scale.ordinal()
             .range(self.options.fill);
-    };
+
+        legend = require('./legend')(self, ngD3);
+    }
 
     /**
      * Met à jour le chord
@@ -54,7 +62,7 @@ module.exports = function(ngD3) {
     function update(newData) {
 
         if (newData) {
-            _data = newData;
+            pvt.data = newData;
         }
 
         self.render();
@@ -67,39 +75,35 @@ module.exports = function(ngD3) {
     function render() {
         self.clear();
 
-        _svg = d3.select(self.container).append('svg')
-            .attr('width', _width)
-            .attr('height', _height)
-          .append('g')
-            .attr('transform', 'translate(' + _width * 0.5 + ',' + _height * 0.5 + ')');
+        pvt.svg = d3.select(self.container).append('svg')
+            .attr('width', pvt.width)
+            .attr('height', pvt.height)
+            .attr('class', 'ngD3-sunburst')
+            .append('g')
+                .attr('transform', 'translate(' + pvt.width * 0.5 + ',' + pvt.height * 0.5 + ')');
 
-        _sunburst.size([2 * Math.PI, _radius * _radius])
+        legend.render(pvt);
 
-        _arc = d3.svg.arc()
+        pvt.sunburst.size([2 * Math.PI, pvt.radius * pvt.radius]);
+
+        pvt.arc = d3.svg.arc()
             .startAngle(function(d) { return d.x; })
             .endAngle(function(d) { return d.x + d.dx; })
             .innerRadius(function(d) { return Math.sqrt(d.y); })
             .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
 
-        var path = _svg.datum(_data).selectAll('path')
-            .data(_sunburst.nodes)
+        var path = pvt.svg.datum(pvt.data).selectAll('path')
+            .data(pvt.sunburst.nodes)
             .enter().append('path')
                 .attr('display', function(d) { return d.depth ? null : 'none'; })
-                .attr('d', _arc)
+                .attr('d', pvt.arc)
                 .style('stroke', '#fff')
-                .style('fill', function(d) { return self.fill((d.children ? d : d.parent).name); })
+                .style('fill', function(d) { return self.options.color[d.name] ? self.options.color[d.name] : '#F0F0F0'; })
                 .style('fill-rule', 'evenodd')
-                .each(ngD3.helpers.sunburst.stash);
+                .each(ngD3.helpers.sunburst.stash)
+                .on('mouseover', legend.mouseover);
 
-        d3.selectAll('input').on('change', function change() {
-            var value = this.value === 'count' ? function() { return 1; } : function(d) { return d.size; };
-
-            path
-                .data(partition.value(value).nodes)
-                .transition()
-                .duration(1500)
-                .attrTween('d', function(a) { arcTween(a, _arc) });
-        });
+        pvt.totalSize = path.data()[0].value;
     }
 
     /**
@@ -108,7 +112,7 @@ module.exports = function(ngD3) {
      * @return {Object} self
      */
     function clear() {
-        d3.select(self.container).selectAll('svg').remove();
+        d3.select(self.container).selectAll('.ngD3-sunburst').remove();
 
         return self;
     }
@@ -122,12 +126,12 @@ module.exports = function(ngD3) {
      */
     function width(newWidth) {
         if (!arguments.length) {
-            return _width;
+            return pvt.width;
         }
 
-        _width = newWidth;
+        pvt.width = newWidth;
         _setRadius();
-        _svg.attr('width', _width);
+        pvt.svg.attr('width', pvt.width);
 
         return self;
     }
@@ -141,17 +145,20 @@ module.exports = function(ngD3) {
      */
     function height(newHeight) {
         if (!arguments.length) {
-            return _height;
+            return pvt.height;
         }
 
-        _height = newHeight;
+        pvt.height = newHeight;
         _setRadius();
-        _svg.attr('height', _height);
+        pvt.svg.attr('height', pvt.height);
 
         return self;
     }
 
+    /**
+     * Update le radius pour le sunburst
+     */
     function _setRadius() {
-        _radius = Math.min(_width, _height) / 2;
+        pvt.radius = Math.min(pvt.width, pvt.height) / 2;
     }
 };

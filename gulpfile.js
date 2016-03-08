@@ -15,12 +15,6 @@ const paths = {
 };
 
 gulp.task('browserify', function() {
-    // return $.browserify(paths.src.js + '/ng-d3.js')
-    //     .bundle()
-    //     //Pass desired output filename to vinyl-source-stream
-    //     .pipe(source('bundle.js'))
-    //     // Start piping stream to tasks!
-    //     .pipe(gulp.dest(paths.dist.js));
 	gulp.src(paths.src.js + '/ng-d3.js')
 		.pipe($.browserify({
             insertGlobals: true,
@@ -29,6 +23,13 @@ gulp.task('browserify', function() {
 		.pipe(gulp.dest(paths.dist.js))
 });
 
+gulp.task('css', function() {
+    gulp.src(paths.src.js + '/css/ng-d3.css')
+        .pipe($.cleanCss())
+        .pipe(gulp.dest(paths.dist.js));
+});
+
 gulp.task('watch', function watch() {
     gulp.watch(paths.src.js + '/**/*.js', ['browserify']);
+    gulp.watch(paths.src.js + '/css/*.css', ['css']);
 });

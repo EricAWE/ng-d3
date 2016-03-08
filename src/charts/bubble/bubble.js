@@ -1,12 +1,14 @@
 module.exports = function(ngD3) {
     'use strict';
 
-    var _format;
-    var _bubble;
-    var _svg;
-    var _width;
-    var _height;
-    var _data;
+    var pvs = {
+        format: null,
+        bubble: null,
+        svg: null,
+        width: null,
+        height: null,
+        data: null
+    };
 
     var self = {
         fill: d3.scale.category20c(),
@@ -18,6 +20,8 @@ module.exports = function(ngD3) {
         render: render,
         clear: clear
     };
+
+    var legend = null;
 
     return self;
 
@@ -31,17 +35,19 @@ module.exports = function(ngD3) {
         self.options = _options;
         self.container = self.options.container;
 
-        _format = d3.format(',d');
-        _bubble = d3.layout.pack()
+        pvs.format = d3.format(',d');
+        pvs.bubble = d3.layout.pack()
             .sort(function(a, b) { return b.value - a.value; })
             .padding(1.5);
 
-        _svg = d3.select(self.container).append('svg');
+        pvs.svg = d3.select(self.container).append('svg');
 
         self.width(self.options.width || 800);
         self.height(self.options.height || 500);
         self.fill = d3.scale.ordinal()
            .range(self.options.fill);
+
+        legend = require('./legend')(self, ngD3);
     }
 
     /**
@@ -52,7 +58,7 @@ module.exports = function(ngD3) {
     function update(newData) {
 
         if (newData) {
-            _data = newData;
+            pvs.data = newData;
         }
 
         self.render();
@@ -65,31 +71,36 @@ module.exports = function(ngD3) {
     function render() {
         self.clear();
 
-        _bubble.size([_width, _height]);
+        pvs.bubble.size([pvs.width, pvs.height]);
 
-        _svg = d3.select(self.container).append('svg')
-            .attr('width', _width)
-            .attr('height', _height)
+        pvs.svg = d3.select(self.container).append('svg')
+            .attr('width', pvs.width)
+            .attr('height', pvs.height)
             .attr('class', 'bubble');
 
-        var node = _svg.selectAll('.node')
-            .data(_bubble.nodes(ngD3.helpers.bubble.classes(_data))
+        var node = pvs.svg.selectAll('.node')
+            .data(pvs.bubble.nodes(ngD3.helpers.bubble.classes(pvs.data))
             .filter(function(d) { return !d.children; }))
             .enter().append('g')
                 .attr('class', 'node')
                 .attr('transform', function(d) { return 'translate(' + d.x + ',' + d.y + ')'; });
 
-        node.append('title')
-            .text(function(d) { return d.className + ': ' + _format(d.value); });
+        // node.append('title')
+        //     .text(function(d) { return d.className + ': ' + pvs.format(d.value); });
 
         node.append('circle')
             .attr('r', function(d) { return d.r; })
-            .style('fill', function(d) { return self.fill(d.packageName); });
+            .style('fill', function(d) { return self.options.color[d.packageName] ? self.options.color[d.packageName] : '#F0F0F0'; });
 
         node.append('text')
             .attr('dy', '.3em')
             .style('text-anchor', 'middle')
             .text(function(d) { return d.className.substring(0, d.r / 3); });
+
+        node.selectAll('circle')
+            .on('mouseover', legend.mouseover);
+
+        legend.render();
     }
 
     /**
@@ -112,11 +123,11 @@ module.exports = function(ngD3) {
      */
     function width(newWidth) {
         if (!arguments.length) {
-            return _width;
+            return pvs.width;
         }
 
-        _width = newWidth;
-        _svg.attr('width', _width);
+        pvs.width = newWidth;
+        pvs.svg.attr('width', pvs.width);
 
         return self;
     }
@@ -130,11 +141,11 @@ module.exports = function(ngD3) {
      */
     function height(newHeight) {
         if (!arguments.length) {
-            return _height;
+            return pvs.height;
         }
 
-        _height = newHeight;
-        _svg.attr('height', _height);
+        pvs.height = newHeight;
+        pvs.svg.attr('height', pvs.height);
 
         return self;
     }

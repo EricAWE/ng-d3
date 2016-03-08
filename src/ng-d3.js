@@ -14,11 +14,12 @@
 
             // Définitions des librairies internes
             self.helpers = require('./utils/helpers');
+            self.tooltip = require('./utils/labels');
 
             // Import des différents charts
-            d3.chart.chord = require('./charts/chord');
-            d3.chart.bubble = require('./charts/bubble');
-            d3.chart.sunburst = require('./charts/sunburst');
+            d3.chart.chord = require('./charts/chord/chord');
+            d3.chart.bubble = require('./charts/bubble/bubble');
+            d3.chart.sunburst = require('./charts/sunburst/sunburst');
         };
 
         /**

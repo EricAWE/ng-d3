@@ -13,11 +13,44 @@ var Helpers = function Helpers() {
         },
         sunburst: {
             stash: stash,
-            arcTween: arcTweenSunburst
-        }
+            arcTween: arcTweenSunburst,
+            getAncestors: getAncestors
+        },
+        extend: extend
     };
 
     return self;
+
+    /**
+     * Extend parameters
+     *
+     * @param  {Object} out
+     * @return {Object} extended
+     */
+    function extend(out) {
+        out = out || {};
+
+        for (var i = 1; i < arguments.length; i++) {
+            var obj = arguments[i];
+
+            if (!obj) {
+                continue;
+            }
+
+            for (var key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    if (typeof obj[key] === 'object') {
+                        out[key] = extend(out[key], obj[key]);
+                    }
+                    else {
+                        out[key] = obj[key];
+                    }
+                }
+            }
+        }
+
+        return out;
+    }
 
     /**
      * Stash the old values for transition.
@@ -28,6 +61,25 @@ var Helpers = function Helpers() {
     function stash(d) {
         d.x0 = d.x;
         d.dx0 = d.dx;
+    }
+
+    /**
+     * Given a node in a partition layout, return an array of all of its ancestor
+     * nodes, highest first, but excluding the root.
+     *
+     * @param  {Object} node
+     * @return {Object} path
+     */
+    function getAncestors(node) {
+        var path = [];
+        var current = node;
+
+        while (current.parent) {
+            path.unshift(current);
+            current = current.parent;
+        }
+
+        return path;
     }
 
     /**

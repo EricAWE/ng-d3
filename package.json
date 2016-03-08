@@ -24,6 +24,7 @@
     "eslint-config-awe": "git+ssh://git@github.com/AgenceAWE/eslint.git",
     "gulp": "^3.9.1",
     "gulp-browserify": "^0.5.1",
+    "gulp-clean-css": "^2.0.3",
     "gulp-load-plugins": "^1.2.0",
     "webpack": "^1.12.14",
     "webpack-stream": "^3.1.0"
