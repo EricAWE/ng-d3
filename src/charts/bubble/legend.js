@@ -17,7 +17,7 @@
          * @return {Object} self
          */
         self.render = function(pvs) {
-            self.tooltip = ngD3.tooltip.create();
+            //self.tooltip = ngD3.tooltip.create();
         };
 
         /**
