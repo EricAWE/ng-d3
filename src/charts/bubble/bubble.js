@@ -85,22 +85,24 @@ module.exports = function(ngD3) {
                 .attr('class', 'node')
                 .attr('transform', function(d) { return 'translate(' + d.x + ',' + d.y + ')'; });
 
-        // node.append('title')
-        //     .text(function(d) { return d.className + ': ' + pvs.format(d.value); });
-
         node.append('circle')
             .attr('r', function(d) { return d.r; })
             .style('fill', function(d) { return self.options.color[d.packageName] ? self.options.color[d.packageName] : '#F0F0F0'; });
 
+        node.selectAll('circle')
+            .on('mouseover', legend.mouseover)
+            .on('mousemove', legend.mousemove)
+            .on('mouseout', legend.mouseleave);
+
         node.append('text')
             .attr('dy', '.3em')
             .style('text-anchor', 'middle')
-            .text(function(d) { return d.className.substring(0, d.r / 3); });
+            .style('pointer-events', 'none')
+            .style('fill', '#F0F0F0')
+            .style('font-size', '12px')
+            .text(function(d) { return d.className.substring(0, d.r / 4); });
 
-        node.selectAll('circle')
-            .on('mouseover', legend.mouseover);
-
-        legend.render();
+        legend.render(pvs);
     }
 
     /**

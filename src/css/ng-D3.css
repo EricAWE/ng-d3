@@ -1,4 +1,13 @@
 /* SUNBURST */
+.chart {
+    font-family: 'Helvetica nueu', sans-serif;
+    font-weight: 400;
+}
+
+.ngD3-animate {
+    transition: opacity 0.2s ease;
+}
+
 .ngD3-explanation {
     position: absolute;
     top:25%;

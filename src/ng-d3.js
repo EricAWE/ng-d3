@@ -15,6 +15,7 @@
             // Définitions des librairies internes
             self.helpers = require('./utils/helpers');
             self.tooltip = require('./utils/labels');
+            self.legend = require('./utils/legend');
 
             // Import des différents charts
             d3.chart.chord = require('./charts/chord/chord');
