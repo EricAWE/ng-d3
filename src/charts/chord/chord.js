@@ -3,30 +3,34 @@ module.exports = function(ngD3) {
 
     // Initialisation des variables privés
     // necessaires au chart
-    var _svg;
-    var _chord;
-    var _data;
-    var _width;
-    var _height;
-    var _innerRadius;
-    var _outerRadius;
-    var _comp;
-    var _arcSvg;
-    var _chordSvg;
-    var _coloring = 'bigger';
+    var pvs = {
+        svg: null,
+        chord: null,
+        data: null,
+        width: null,
+        height: null,
+        innerRadius: null,
+        outerRadius: null,
+        comp: null,
+        arcSvg: null,
+        chordSvg: null,
+    };
 
     // Construction de la class
     var self = {
-        fill: d3.scale.category20c,
         options: {},
+        chart: 'chord',
+        dataType: 'matrix',
         init: init,
         update: update,
         clear: clear,
         render: render,
         width: width,
         height: height,
-        data: data
+        data: data,
+        matrix: matrix
     };
+    var legend = null;
 
     return self;
 
@@ -40,24 +44,16 @@ module.exports = function(ngD3) {
         self.options = _options;
         self.container = self.options.container;
 
-        _comp = {
-            bigger: function(a, b) { return a.value > b.value ? a : b; },
-            smaller: function(a, b) { return a.value < b.value ? a : b; }
-        };
-
-        _chord = d3.layout.chord()
+        pvs.chord = d3.layout.chord()
             .padding(0.05)
             .sortSubgroups(d3.descending);
 
-        _svg = d3.select(self.container)
+        pvs.svg = d3.select(self.container)
             .append('svg');
 
         self.width(self.options.width || 800);
         self.height(self.options.height || 500);
         _setRadius();
-
-        self.fill = d3.scale.ordinal()
-            .range(self.options.fill);
 
         return self;
     }
@@ -70,20 +66,22 @@ module.exports = function(ngD3) {
     function update(newData) {
 
         if (newData) {
-            _data = newData;
+            pvs.data = newData;
+            pvs.matrix = ngD3.helpers.chord.classes(newData);
+            pvs.supports = ngD3.helpers.chord.sortSupports(newData, self.options.supports);
         }
 
-        if (!_chord.matrix()) {
-            _chord.matrix(_data);
+        if (!pvs.chord.matrix()) {
+            pvs.chord.matrix(pvs.matrix);
             self.render();
         }
         else {
             var old = {
-                groups: _chord.groups(),
-                chords: _chord.chords()
+                groups: pvs.chord.groups(),
+                chords: pvs.chord.chords()
             };
 
-            _chord.matrix(_data);
+            pvs.chord.matrix(pvs.matrix);
             _transition(old);
         }
     }
@@ -107,24 +105,24 @@ module.exports = function(ngD3) {
      * @param {Object} old
      */
     function _transition(old) {
-        _svg.selectAll('.ticks')
+        pvs.svg.selectAll('.ticks')
             .transition()
             .duration(0)
             .attr('opacity', 0);
 
-        _svg.selectAll('.arc')
-            .data(_chord.groups)
+        pvs.svg.selectAll('.arc')
+            .data(pvs.chord.groups)
             .transition()
             .duration(1500)
-            .attrTween('d', ngD3.helpers.chord.arcTween(_arcSvg, old));
+            .attrTween('d', ngD3.helpers.chord.arcTween(pvs.arcSvg, old));
 
-        _svg.selectAll('.chord')
+        pvs.svg.selectAll('.chord')
             .selectAll('path')
-            .data(_chord.chords)
+            .data(pvs.chord.chords)
             .transition()
             .duration(1500)
-            .style('fill', function(d) { return self.fill(_comp[_coloring](d.source, d.target).index); })
-            .attrTween('d', ngD3.helpers.chord.chordTween(_chordSvg, old));
+            .style('fill', function(d) { return pvs.supports[d.source.index].color; })
+            .attrTween('d', ngD3.helpers.chord.chordTween(pvs.chordSvg, old));
 
         setTimeout(_drawTicks, 1100);
     }
@@ -136,56 +134,106 @@ module.exports = function(ngD3) {
     function render() {
         self.clear();
 
-        _svg = d3.select(self.container)
-            .append('svg')
-            .attr('width', _width)
-            .attr('height', _height)
+        legend = require('../../utils/legend')(self, ngD3);
+        var groupIds = Math.round(Math.random() * 1000);
+
+        pvs.svg = legend.placeChart()
+            .attr('width', pvs.width)
+            .attr('height', pvs.height)
             .append('g')
-            .attr('transform', 'translate(' + _width / 2 + ',' + _height / 2 + ')');
+            .attr('transform', 'translate(' + pvs.width / 2 + ',' + pvs.height / 2 + ')');
 
-        _svg.append('g')
-            .selectAll('path')
-            .data(_chord.groups)
-            .enter().append('path')
-                .attr('class', 'arc')
-                .style('fill', function(d) { return self.fill(d.index); })
-                .style('stroke', function(d) { return self.fill(d.index); })
-                .attr('d', _arcSvg)
-                .on('mouseover', ngD3.helpers.chord.fade(0.1, _svg))
-                .on('mouseout', ngD3.helpers.chord.fade(1, _svg));
+        var g = pvs.svg.selectAll('.group')
+            .data(pvs.chord.groups)
+          .enter().append('g')
+            .attr('class', 'group');
 
-        _svg.append('g')
+        g.append('path')
+            .attr('class', 'arc')
+            .attr('id', function(d) { return 'group' + d.index + '-' + groupIds; })
+            .style('fill', function(d) { return pvs.supports[d.index].color; })
+            .style('stroke', function(d) { return pvs.supports[d.index].color; })
+            .attr('d', pvs.arcSvg)
+            .on('mouseover', _mouseover)
+            .on('mouseout', _mouseout);
+
+        g.append('text')
+            .attr('x', 6)
+            .attr('dy', 12)
+            .style('pointer-events', 'none')
+            .filter(function(d) { return d.value > 110; })
+          .append('textPath')
+            .attr('xlink:href', function(d) { return '#group' + d.index + '-' + groupIds; })
+            .text(function(d) { return pvs.supports[d.index].name; });
+
+        pvs.svg.append('g')
             .attr('class', 'chord')
             .selectAll('path')
-            .data(_chord.chords)
+            .data(pvs.chord.chords)
             .enter().append('path')
-                .style('fill', function(d) { return self.fill(_comp[_coloring](d.source, d.target).index); })
-                .attr('d', _chordSvg)
+                .style('fill', function(d) { return pvs.supports[d.source.index].color; })
+                .attr('d', pvs.chordSvg)
                 .style('opacity', 1);
+
+        // On initialise le tableau si la légende est autorisé
+        if (legend.parameters.enable) {
+            legend.table.update(pvs.supports[0]);
+        }
 
         _drawTicks();
     }
 
     /**
      * @private
-     * Dessigne les ticks pour le chord
+     * Gestion du hover
+     *
+     * @param  {Object} g
+     * @param  {Number} i
+     * @return {Object} fade
+     */
+    function _mouseover(g, i) {
+        // Fade les chords non dépedantes
+        ngD3.helpers.chord.fade(g, i, 0.1, pvs.svg);
+
+        // Update le tableau
+        legend.table.update(pvs.supports[i]);
+    }
+
+    /**
+     * @private
+     * Gestion du mouseout
+     *
+     * @param  {Object} g
+     * @param  {Number} i
+     * @return {Object} fade
+     */
+    function _mouseout(g, i) {
+        // Affiche toutes les chords
+        ngD3.helpers.chord.fade(g, i, 1, pvs.svg);
+
+        // Update le tableau
+    }
+
+    /**
+     * @private
+     * Dessine les ticks pour le chord
      *
      */
     function _drawTicks() {
-        _svg.selectAll('.ticks').remove();
+        pvs.svg.selectAll('.ticks').remove();
 
-        var ticks = _svg.append('g')
+        var ticks = pvs.svg.append('g')
             .attr('class', 'ticks')
             .attr('opacity', 0.1)
             .selectAll('g')
-            .data(_chord.groups)
+            .data(pvs.chord.groups)
             .enter()
                 .append('g')
                 .selectAll('g')
                 .data(ngD3.helpers.chord.groupTicks)
                 .enter()
                     .append('g')
-                    .attr('transform', function(d) { return 'rotate(' + (d.angle * 180 / Math.PI - 90) + ')' + 'translate(' + _outerRadius + ',0)'; });
+                    .attr('transform', function(d) { return 'rotate(' + (d.angle * 180 / Math.PI - 90) + ')' + 'translate(' + pvs.outerRadius + ',0)'; });
 
         ticks.append('line')
             .attr('x1', 1)
@@ -201,9 +249,26 @@ module.exports = function(ngD3) {
             .attr('transform', function(d) { return d.angle > Math.PI ? 'rotate(180)translate(-16)' : null; })
             .text(function(d) { return d.label; });
 
-        _svg.selectAll('.ticks').transition()
+        pvs.svg.selectAll('.ticks').transition()
             .duration(340)
             .attr('opacity', 1);
+    }
+
+    /**
+     * Met à jour la matrix ou la renvoient
+     * si aucun paramètre n'est passé
+     *
+     * @param  {Object} data
+     * @return {Object} data || self
+     */
+    function matrix(newData) {
+        if (!arguments.length) {
+            return pvs.matrix;
+        }
+
+        pvs.matrix = newData;
+
+        return self;
     }
 
     /**
@@ -215,10 +280,10 @@ module.exports = function(ngD3) {
      */
     function data(newData) {
         if (!arguments.length) {
-            return _data;
+            return pvs.data;
         }
 
-        _data = newData;
+        pvs.data = newData;
 
         return self;
     }
@@ -232,11 +297,11 @@ module.exports = function(ngD3) {
      */
     function width(newWidth) {
         if (!arguments.length) {
-            return _width;
+            return pvs.width;
         }
 
-        _width = newWidth;
-        _svg.attr('width', _width);
+        pvs.width = newWidth;
+        pvs.svg.attr('width', pvs.width);
         _setRadius();
 
         return self;
@@ -251,11 +316,11 @@ module.exports = function(ngD3) {
      */
     function height(newHeight) {
         if (!arguments.length) {
-            return _height;
+            return pvs.height;
         }
 
-        _height = newHeight;
-        _svg.attr('height', _height);
+        pvs.height = newHeight;
+        pvs.svg.attr('height', pvs.height);
         _setRadius();
 
         return self;
@@ -273,11 +338,11 @@ module.exports = function(ngD3) {
             radius = Math.min(self.width(), self.height()) * 0.41;
         }
 
-        _innerRadius = radius;
-        _outerRadius = _innerRadius * 1.1;
+        pvs.innerRadius = radius;
+        pvs.outerRadius = pvs.innerRadius * 1.1;
 
-        _arcSvg = d3.svg.arc().innerRadius(_innerRadius).outerRadius(_outerRadius);
-        _chordSvg = d3.svg.chord().radius(_innerRadius);
+        pvs.arcSvg = d3.svg.arc().innerRadius(pvs.innerRadius).outerRadius(pvs.outerRadius);
+        pvs.chordSvg = d3.svg.chord().radius(pvs.innerRadius);
 
         return self;
     }

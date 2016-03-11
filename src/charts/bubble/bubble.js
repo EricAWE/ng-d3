@@ -11,8 +11,9 @@ module.exports = function(ngD3) {
     };
 
     var self = {
-        fill: d3.scale.category20c(),
         options: {},
+        chart: 'bubble',
+        dataType: 'genealogic',
         init: init,
         update: update,
         width: width,
@@ -46,8 +47,6 @@ module.exports = function(ngD3) {
         self.height(self.options.height || 500);
         self.fill = d3.scale.ordinal()
            .range(self.options.fill);
-
-        legend = require('./legend')(self, ngD3);
     }
 
     /**
@@ -71,9 +70,12 @@ module.exports = function(ngD3) {
     function render() {
         self.clear();
 
-        pvs.bubble.size([pvs.width, pvs.height]);
+        legend = require('../../utils/legend')(self, ngD3);
 
-        pvs.svg = d3.select(self.container).append('svg')
+        pvs.bubble.size([pvs.width, pvs.height]);
+        pvs.svg = legend.placeChart();
+
+        pvs.svg
             .attr('width', pvs.width)
             .attr('height', pvs.height)
             .attr('class', 'bubble');
@@ -90,9 +92,9 @@ module.exports = function(ngD3) {
             .style('fill', function(d) { return self.options.color[d.packageName] ? self.options.color[d.packageName] : '#F0F0F0'; });
 
         node.selectAll('circle')
-            .on('mouseover', legend.mouseover)
-            .on('mousemove', legend.mousemove)
-            .on('mouseout', legend.mouseleave);
+           .on('mouseover', function(d) { ngD3.tooltip.mouseover(self, d); })
+           .on('mousemove', ngD3.tooltip.mousemove)
+           .on('mouseout', ngD3.tooltip.mouseleave);
 
         node.append('text')
             .attr('dy', '.3em')
@@ -102,7 +104,7 @@ module.exports = function(ngD3) {
             .style('font-size', '12px')
             .text(function(d) { return d.className.substring(0, d.r / 4); });
 
-        legend.render(pvs);
+        ngD3.tooltip.render(pvs);
     }
 
     /**

@@ -3,10 +3,12 @@ var Helpers = function Helpers() {
 
     var self = {
         chord: {
+            classes: classesChord,
             groupTicks: groupTicks,
             fade: fade,
             arcTween: arcTweenChord,
-            chordTween: chordTween
+            chordTween: chordTween,
+            sortSupports: sortSupports
         },
         bubble: {
             classes: classesBubble
@@ -20,6 +22,48 @@ var Helpers = function Helpers() {
     };
 
     return self;
+
+    /**
+     * Returns a color array in the right order from data
+     *
+     * @param  {Object} data
+     * @param  {Object} supports
+     * @return {Array}  colorArray
+     */
+    function sortSupports(data, supports) {
+        var suportsArray = [];
+
+        data.children.forEach(function(children) {
+            var support = _.find(supports, {key: children.name});
+
+            suportsArray.push(support);
+        });
+
+        return suportsArray;
+    }
+
+    /**
+     * Returns a flattened hierarchy containing all leaf nodes under the root
+     * for the chord diagram
+     *
+     * @param  {Object} root
+     * @return {Array}  data
+     */
+    function classesChord(root) {
+        var data = [];
+
+        root.children.forEach(function(children) {
+            var childArray = [];
+
+            children.children.forEach(function(value) {
+                childArray.push(value.size);
+            });
+
+            data.push(childArray);
+        });
+
+        return data;
+    }
 
     /**
      * Extend parameters
@@ -144,13 +188,11 @@ var Helpers = function Helpers() {
      * @param  {Object} svg
      * @return {Object} svgs
      */
-    function fade(opacity, svg) {
-        return function(g, i) {
-            svg.selectAll('g.chord path')
+    function fade(g, i, opacity, svg) {
+        return svg.selectAll('g.chord path')
             .filter(function(d) { return d.source.index !== i && d.target.index !== i; })
             .transition()
             .style('opacity', opacity);
-        };
     }
 
     /**

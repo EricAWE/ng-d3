@@ -8,7 +8,8 @@
         "d3": true,
         "require": true,
         "module": true,
-        "exports": true
+        "exports": true,
+        "ƒ": true
     },
     "rules": {
         "max-statements": [2, 30]

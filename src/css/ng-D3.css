@@ -33,3 +33,37 @@
 .ngd3-trail {
     display: block;
 }
+
+/* TABLE */
+.ngD3-table-chart > * {
+    float: left;
+}
+
+.ngD3-legend-table {
+    background-color: #f8f8f8;
+}
+
+.ngD3-legend-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.ngD3-legend-table thead th {
+    padding: 10px;
+    background-color: #F0F0F0;
+    border-width: 0;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.ngD3-legend-table tbody tr:nth-child(odd) {
+    background-color: #f8f8f8;
+}
+
+.ngD3-legend-table tbody tr {
+    border-bottom: 1px solid #e5e5e5;
+    background-color: #fff;
+}
+
+.ngD3-legend-table tbody td {
+    padding: 10px;
+}

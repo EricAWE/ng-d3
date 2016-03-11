@@ -9,8 +9,9 @@
          * Initie ng-d3 et importe toutes les librairies necessaires
          */
         self.init = function initNgD3() {
-            window.d3 = window.d3 || require('d3');
+            window.d3 = window.d3 || require('d3-jetpack');
             window.d3.chart = window.d3.chart || require('d3.chart');
+            window._ = require('lodash');
 
             // Définitions des librairies internes
             self.helpers = require('./utils/helpers');
