@@ -118,6 +118,6 @@ Array d'objet
 | desc | String | of the total | description pour le sunburst |
 
 ## Todo
-[ ] Créer des template css
-[ ] Personalisation de la légende via des fonctions
-[ ] Améliorer le responsive
+- Créer des template css
+- Personalisation de la légende via des fonctions
+- Améliorer le responsive
