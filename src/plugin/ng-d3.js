@@ -36,6 +36,29 @@
             chart.init(parameters.options);
             chart.update(parameters.data);
 
+            // Gestion du responsive
+            var container = document.getElementsByClassName(parameters.options.container.split('.')[1])[0].parentElement;
+
+            window.onresize = function() { self.updateChart(chart, container); };
+
+            return chart;
+        };
+
+        /**
+         * Resize le chart à la taille de
+         * son container
+         *
+         * @param  {Object} chart
+         * @param  {Object} parameters
+         * @return {Object} self
+         */
+        self.updateChart = function(chart, container) {
+            var size = { width: container.clientWidth, height: container.clientHeight };
+
+            chart.width(size.width);
+            chart.height(size.height);
+            chart.update();
+
             return chart;
         };
 
@@ -43,5 +66,7 @@
 
     window.ngD3 = new NgD3();
     window.ngD3.init();
+
+    module.exports = window.ngD3;
 
 })(window);

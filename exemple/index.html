@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html ng-app="Demo">
+    <head>
+        <meta charset="utf-8">
+        <title>D3 Wrapper</title>
+        <script src="../node_modules/angular/angular.min.js"></script>
+        <script src="../dist/ng-d3.js"></script>
+        <link rel="stylesheet" href="../dist/ng-d3.css" />
+        <style>
+            body { font: 14px sans-serif; color : #383838; }
+            .chord path { fill-opacity: .67; stroke: #000; stroke-width: .5px; }
+            .chart { float: left; position: relative; }
+            a { cursor: pointer; color: #179fd2; text-decoration: underline; }
+            li { display: inline-block; }
+            li:after { content:'|'; margin: 0 10px; color: #cecece; }
+            li:last-child::after { content: ''; }
+
+
+        </style>
+    </head>
+    <body>
+
+        <script>
+
+            var data = {
+                'name': 'relation',
+                'children': [
+                    {
+                        'name': 'seo',
+                        'children': [
+                            {'name': 'seo', 'size': 3938},
+                            {'name': 'sea', 'size': 10738},
+                            {'name': 'referal', 'size': 1200}
+                        ]
+                    },
+                    {
+                        'name': 'sea',
+                        'children': [
+                            {'name': 'seo', 'size': 1200},
+                            {'name': 'sea', 'size': 10738},
+                            {'name': 'referal', 'size': 2000}
+                        ]
+                    },
+                    {
+                        'name': 'referal',
+                        'children': [
+                            {'name': 'seo', 'size': 400},
+                            {'name': 'sea', 'size': 800},
+                            {'name': 'referal', 'size': 3000}
+                        ]
+                    }
+                ]
+            };
+
+            var data2 = {
+                'name': 'relation',
+                'children': [
+                    {
+                        'name': 'seo',
+                        'children': [
+                            {'name': 'seo', 'size': 2030},
+                            {'name': 'sea', 'size': 400},
+                            {'name': 'referal', 'size': 10200}
+                        ]
+                    },
+                    {
+                        'name': 'sea',
+                        'children': [
+                            {'name': 'seo', 'size': 1200},
+                            {'name': 'sea', 'size': 10738},
+                            {'name': 'referal', 'size': 2000}
+                        ]
+                    },
+                    {
+                        'name': 'referal',
+                        'children': [
+                            {'name': 'seo', 'size': 3938},
+                            {'name': 'sea', 'size': 10738},
+                            {'name': 'referal', 'size': 1200}
+                        ]
+                    }
+                ]
+            };
+
+            var parameters = {
+                chart: 'bubble',
+                data: data,
+                options: {
+                    supports: [
+                        {key:'referal', name: 'Referal', color: '#ab4880'},
+                        {key:'seo', name: 'Seo', color: '#5aab76'},
+                        {key:'sea', name: 'Sea', color: '#50a0cd'}
+                    ],
+                    // width: 900,
+                    // height: 400,
+                    legend: {
+                        enable: true,
+                        position: 'right',
+                        width: 0.5,
+                        columns: [
+                            {'name': 'relation', 'head': 'Cannaux', 'text-align': 'left'},
+                            {'name': 'value', 'head': 'Transactions', 'text-align': 'center'},
+                            {'name': 'relativeValue', 'head': '% du total', 'text-align': 'center'}
+                        ],
+                        desc: 'of the total'
+                    }
+                }
+            };
+
+            var app = angular.module( 'Demo', ['ngD3'] );
+                angular
+                    .module('Demo')
+                    .controller('DemoController', demoController);
+
+            demoController.$inject = ['$scope', '$timeout'];
+
+            function demoController($scope, $timeout) {
+                var isData1 = true;
+
+                $scope.parameters = parameters;
+
+                $scope.updateChart = function(chart) {
+                    $scope.parameters.chart = chart;
+                }
+
+                $scope.updateData = function() {
+                    var d = isData1 ? data2 : data;
+
+                    $scope.parameters.data = d;
+                    isData1 = !isData1;
+                }
+            }
+
+        </script>
+
+        <div ng-controller="DemoController as demoController">
+            <ul>
+                <li><a ng-click="updateChart('bubble')">bubble</a></li>
+                <li><a ng-click="updateChart('sunburst')">sunburst</a></li>
+                <li><a ng-click="updateChart('chord')">chord</a></li>
+            </ul>
+
+            <div class="widget" style="width:80%; height:500px;">
+                <ng-d3 parameters="parameters"></ng-d3>
+            </div>
+
+            <div style="clear:both;">
+                <button ng-click="updateData()">Update data</button>
+            </div>
+        </div>
+    </body>
+</html>

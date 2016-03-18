@@ -59,13 +59,49 @@ module.exports = function(ngD3) {
      *
      * @param  {Object} data
      */
-    function update(newData) {
+    function update(newData, options) {
+
+        if (options) {
+            self.options = options;
+            self.width(self.options.width || 800);
+            self.height(self.options.height || 500);
+            legend.parameters = _.extend(legend.parameters, self.options.legend);
+        }
 
         if (newData) {
             pvt.data = newData;
         }
 
-        self.render();
+        self.supports = ngD3.helpers.chord.sortSupports(pvt.data, self.options.supports);
+
+        if (!pvt.arc) {
+            self.render();
+        }
+        else {
+            self.render();
+        }
+    }
+
+    /**
+     * @private
+     * Fait la transition pour le bubble
+     *
+     * @param  {Object} old
+     */
+    function _transition() {
+        self.width(pvt.width);
+        self.height(pvt.height);
+
+        pvt.sunburst.size([2 * Math.PI, pvt.radius * pvt.radius]);
+
+        pvt.svg.data([pvt.data]).selectAll('path')
+            .data(pvt.sunburst.nodes)
+            .selectAll('path')
+            .enter()
+            .append('path')
+            .each(ngD3.helpers.sunburst.stash);
+
+        pvt.totalSize = pvt.path.data()[0].value;
     }
 
     /**
@@ -74,15 +110,18 @@ module.exports = function(ngD3) {
      */
     function render() {
         self.clear();
+        legend.render(pvt);
+
+        var height = pvt.height - 30;
+        var width = pvt.width - 30;
 
         pvt.svg = d3.select(self.container).append('svg')
-            .attr('width', pvt.width)
-            .attr('height', pvt.height)
+            .attr('width', width)
+            .attr('height', height)
             .attr('class', 'ngD3-sunburst')
             .append('g')
-                .attr('transform', 'translate(' + pvt.width * 0.5 + ',' + pvt.height * 0.5 + ')');
+                .attr('transform', 'translate(' + width * 0.5 + ',' + height * 0.5 + ')');
 
-        legend.render(pvt);
 
         pvt.sunburst.size([2 * Math.PI, pvt.radius * pvt.radius]);
 
@@ -92,18 +131,19 @@ module.exports = function(ngD3) {
             .innerRadius(function(d) { return Math.sqrt(d.y); })
             .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
 
-        var path = pvt.svg.datum(pvt.data).selectAll('path')
+        pvt.path = pvt.svg.data([pvt.data]).selectAll('path')
             .data(pvt.sunburst.nodes)
             .enter().append('path')
+                .attr('class', 'sunpath')
                 .attr('display', function(d) { return d.depth ? null : 'none'; })
                 .attr('d', pvt.arc)
                 .style('stroke', '#fff')
-                .style('fill', function(d) { return self.options.color[d.name] ? self.options.color[d.name] : '#F0F0F0'; })
+                .attr('fill', function(d) { return _.find(self.supports, {key: d.name}) ? _.find(self.supports, {key: d.name}).color : '#F0F0F0'; })
                 .style('fill-rule', 'evenodd')
                 .each(ngD3.helpers.sunburst.stash)
                 .on('mouseover', legend.mouseover);
 
-        pvt.totalSize = path.data()[0].value;
+        pvt.totalSize = pvt.path.data()[0].value;
     }
 
     /**
@@ -159,6 +199,6 @@ module.exports = function(ngD3) {
      * Update le radius pour le sunburst
      */
     function _setRadius() {
-        pvt.radius = Math.min(pvt.width, pvt.height) / 2;
+        pvt.radius = Math.min((pvt.width - 30), (pvt.height - 30)) / 2;
     }
 };

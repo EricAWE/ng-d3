@@ -14,12 +14,19 @@ const paths = {
     }
 };
 
+function onError(err) {
+    console.log(err);
+    this.emit('end');
+}
+
 gulp.task('browserify', function() {
-	gulp.src(paths.src.js + '/ng-d3.js')
+	gulp.src(paths.src.js + '/ngD3.directive.js')
 		.pipe($.browserify({
             insertGlobals: true,
             debug: true
 		}))
+        .on('error', onError)
+        .pipe($.rename('ng-d3.js'))
 		.pipe(gulp.dest(paths.dist.js))
 });
 
@@ -31,5 +38,6 @@ gulp.task('css', function() {
 
 gulp.task('watch', function watch() {
     gulp.watch(paths.src.js + '/**/*.js', ['browserify']);
+    gulp.watch(paths.src.js + '/*.js', ['browserify']);
     gulp.watch(paths.src.js + '/css/*.css', ['css']);
 });

@@ -9,9 +9,7 @@
                 width: null,
                 b: { w: 75, h: 30, s: 3, t: 10 }
             },
-            tooltip: {
-                desc: 'yo'
-            }
+            desc: 'yo'
         };
 
         /**
@@ -23,18 +21,18 @@
         self.render = function renderLegend(_sunburst) {
             sunburst = _sunburst;
 
-            var explanationTop = options.trail.b.h ? ((sunburst.height * 0.5) - (sunburst.radius / 2)) + options.trail.b.h : ((sunburst.height * 0.5) - (sunburst.radius / 2));
+            var explanationTop = options.trail.b.h ? ((sunburst.height * 0.5) - (options.trail.b.h * 1)) : ((sunburst.height * 0.5) - (sunburst.radius / 2));
 
             sunburst.svg.append('circle')
-                .attr('r', sunburst.radius + 10)
+                .attr('r', sunburst.radius + 15)
                 .style('fill', 'none')
                 .style('pointer-events', 'all')
                 .on('mouseleave', self.mouseout);
 
             self.explanation
-                .style('width', sunburst.radius + 'px')
-                .style('height', sunburst.radius + 'px')
-                .style('left', ( sunburst.width * 0.5) - (sunburst.radius / 2) + 'px')
+                .style('width', sunburst.radius + 10 + 'px')
+                .style('height', sunburst.radius + 10 + 'px')
+                .style('left', ((sunburst.width * 0.5) - (sunburst.radius * 0.5)) + 'px')
                 .style('top', explanationTop + 'px');
         };
 
@@ -63,7 +61,7 @@
             }
 
             self.explanation.style('visibility', 'visible');
-            self.percentage.html(percentageString + '<br><span style="font-size:16px;">' + options.tooltip.desc + '</span>');
+            self.percentage.html(percentageString + '<br><span style="font-size:16px;">' + options.desc + '</span>');
 
             _updateBreadcrumbs(sequenceArray, percentageString);
 
@@ -89,7 +87,7 @@
 
             entering.append('svg:polygon')
                 .attr('points', _breadcrumbPoints)
-                .style('fill', function(d) { return options.color[d.name]; });
+                .style('fill', function(d) { return _.find(options.supports, {key: d.name}) ? _.find(options.supports, {key: d.name}).color : '#F0F0F0'; });
 
             entering.append('svg:text')
                 .attr('x', (options.trail.b.w + options.trail.b.t) / 2)
@@ -142,7 +140,7 @@
          */
         function _init() {
             options = ngD3.helpers.extend({}, options, sunburst.options.legend);
-            options.color = sunburst.options.color;
+            options.supports = sunburst.options.supports;
 
             self.explanation = d3.select(sunburst.container)
                 .append('div')

@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    var Legend = function Legend(chart, ngD3) {
+    var Legend = function Legend(chart) {
 
         var self = this;
         var pvs = {
@@ -34,7 +34,6 @@
             }
 
             // On initie la width et la height de la légende
-            self.width(self.parameters.width);
             self.height(40);
 
             // On rend la légende voulue
@@ -51,16 +50,26 @@
             // Rajoute une classe au container
             d3.select(chart.options.container).classed('ngD3-table-chart', true);
 
-            var tableLegend = require('./table-legend')();
-            var wrapper = d3.select(chart.options.container)
-                .append('div')
-                .attr('class', 'ngD3-legend ngD3-legend-table')
-                .style('height', self.height() + 'px')
-                .style('width', self.width() + 'px');
+            // Supprime la légende existante
+            d3.select(chart.options.container)
+                .selectAll('.ngD3-legend-table')
+                .remove();
 
-            var table = wrapper.append('table');
+            if (self.parameters.enable === true) {
+                self.width(self.parameters.width);
+                self.height(40);
 
-            self.table = tableLegend.init(chart, self, table);
+                var tableLegend = require('./table-legend')();
+                var wrapper = d3.select(chart.options.container)
+                    .append('div')
+                    .attr('class', 'ngD3-legend ngD3-legend-table')
+                    .style('height', self.height() + 'px')
+                    .style('width', self.width() + 'px');
+
+                var table = wrapper.append('table');
+
+                self.table = tableLegend.init(chart, self, table);
+            }
 
             return self;
         };
@@ -71,48 +80,59 @@
          * @return {Object} self;
          */
         self.renderGenealogic = function() {
-            var g;
-            var li = { w: self.width(), r: 7 };
-            var legend = d3.select(chart.options.container).append('svg:svg')
-                .attr('height', self.height())
-                .attr('width', self.width())
-                .attr('class', 'ngD3-legend')
-                .append('g');
+            // Supprime la légende existante
+            d3.select(chart.options.container)
+                .selectAll('.ngD3-legend')
+                .remove();
 
-            li.h = li.r * 4;
-            pvs.horizontalW = 0;
+            if (self.parameters.enable === true) {
 
-            g = legend.selectAll('g')
-                .data(d3.entries(chart.options.color))
-                .enter()
-                .append('svg:g');
+                self.width(self.parameters.width);
+                self.height(40);
 
-            g.append('svg:' + self.parameters.itemType)
-                .attr('cx', li.r)
-                .attr('cy', li.r)
-                .attr('r', li.r)
-                .attr('height', li.r)
-                .style('fill', function(d) { return d.value; });
+                var g;
+                var li = { w: self.width(), r: 7 };
+                var legend = d3.select(chart.options.container).append('svg:svg')
+                    .attr('height', self.height())
+                    .attr('width', self.width())
+                    .attr('class', 'ngD3-legend')
+                    .append('g');
 
-            g.append('svg:text')
-                .attr('x', li.r + 20)
-                .attr('y', 0)
-                .attr('dy', li.h / 2.5)
-                .attr('text-anchor', 'left')
-                .attr('font-size', li.r * 2)
-                .attr('font-family', self.parameters.fontFamily)
-                .text(function(d) { return _getTitle(d.key); });
+                li.h = li.r * 4;
+                pvs.horizontalW = 0;
 
-            g.attr('transform', function(d, i) {
-                return _getTranslateGenealogic(g, li, i);
-            });
+                g = legend.selectAll('g')
+                    .data(d3.entries(chart.options.supports))
+                    .enter()
+                    .append('svg:g');
 
-            // Centre la légende dans sa hauteur et largeur
-            var alignement = _getLegendAlignement(legend);
+                g.append('svg:' + self.parameters.itemType)
+                    .attr('cx', li.r)
+                    .attr('cy', li.r)
+                    .attr('r', li.r)
+                    .attr('height', li.r)
+                    .style('fill', function(d) { return d.value.color; });
 
-            legend.attr('transform', function() {
-                return 'translate(' + alignement.left + ',' + alignement.top + ')';
-            });
+                g.append('svg:text')
+                    .attr('x', li.r + 20)
+                    .attr('y', 0)
+                    .attr('dy', li.h / 2.5)
+                    .attr('text-anchor', 'left')
+                    .attr('font-size', li.r * 2)
+                    .attr('font-family', self.parameters.fontFamily)
+                    .text(function(d) { return d.value.name; });
+
+                g.attr('transform', function(d, i) {
+                    return _getTranslateGenealogic(g, li, i);
+                });
+
+                // Centre la légende dans sa hauteur et largeur
+                var alignement = _getLegendAlignement(legend);
+
+                legend.attr('transform', function() {
+                    return 'translate(' + alignement.left + ',' + alignement.top + ')';
+                });
+            }
 
             return self;
         };
@@ -130,7 +150,7 @@
 
             if (self.parameters.position === 'right' || self.parameters.position === 'left') {
                 pvs.width = chart.width() * (1 - newWidth);
-                chart.width(chart.width() - pvs.width);
+                chart.width((chart.width() - 1) - pvs.width);
             }
             else {
                 pvs.width = chart.width();
@@ -226,23 +246,6 @@
             pvs.horizontalW += (g[0][i].getBBox().width + 20);
 
             return translate;
-        }
-
-        /**
-         * @private
-         * Set les titles pour la légende
-         *
-         * @param  {String} key
-         * @return {String} title
-         */
-        function _getTitle(key) {
-            var title = key;
-
-            if (self.parameters.titles && self.parameters.titles[key]) {
-                title = self.parameters.titles[key];
-            }
-
-            return title;
         }
 
         _init();

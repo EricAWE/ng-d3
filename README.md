@@ -1,43 +1,15 @@
 ng-d3
 =====
 
+nd-d3 is a library for creating reusable data visualizations from different types of charts well known in [d3.js](https://d3js.org/). 
 
-Notes et piste de reflections pour la construction d'une directive angular pour wrapper D3.js
+ng-d3 propose pour l'instant 3 types de charts. Le nombre de chart réalisable tant à grandir avec le temps.
+Pour l'instant les charts proposés sont le [bubble chart](http://bl.ocks.org/mbostock/4063269), le [sunburst](http://bl.ocks.org/mbostock/4063423) et le [chord diagram](http://bl.ocks.org/mbostock/4062006).
 
-[TOC]
+**Currently ng-d3 is in development.**
 
-
-## Modéle des données
-### [Chord Diagramme](http://bl.ocks.org/mbostock/4062006)
-**• Affiche des données flat selon leur volume étant en relations entre elles de façon biderictionnels.**
-• Mise en relations de data entres elles et croisé. Il y'a une relation parents enfants unique. Un parent detient un enfant, cet enfant peux lui même détenir le parent.
-• La mise en relation se fait via une matrix :
-
-**Représentation dans D3.js**
-
-```javascript
-var matrix = [
-  [11975,  5871, 8916, 2868],
-  [ 1951, 10048, 2060, 6171],
-  [ 8010, 16145, 8090, 8045],
-  [ 1013,   990,  940, 6907]
-];
-```
-
-**Représentation de la donné**
-
-```javascript
-var data = {
-    name : "flare",
-
-};
-```
-*todo : <s>Réfléchir à un mode de données empirique possible comparable au bubble chart.</s>*
-
-### [Bubble Chart](http://bl.ocks.org/mbostock/4063269)
-**• Affiche des données deep selon leur volume ayant des relations parents enfants.**
-• Représentation du volume d'entités contenant elle même d'autres entités.
-• Structure de données empiriques. Chaque élèments peut avoir un ou plusieurs enfants.
+## Data Formating
+Pour tous les charts ng-d3 que vous utiliserez, le même modèle de donné devra être fournis. 
 
 ```javascript
 var data = {
@@ -58,84 +30,94 @@ var data = {
 };
 ```
 
-### [Sunburst Partition](http://bl.ocks.org/mbostock/4063423)
-**• Affiche des données deep selon leur volume ayant des relations parents enfants.**
-• Mise en relation de données inclues les unes dans les autres. Une entité parente détient une entité enfant. Pas de partage ente plusieurs données enfants.
-• Utilise le même type de données empiriques que le bubble chart.
+##Get Started
 
-### [Streamgraph](http://bl.ocks.org/mbostock/4060954)
-**• Affiche des données flat selon leur volume et un axe supplémentaire (temp) sans relations entres elles.**
-• Evolution du volume des mêmes metrics (sur l'axe des Y) par rapport à une donné mesuré en X (souvent le temps).
-• Les data se présente sous un axe x,y pour chaque metric donné
+###Install
+Pour installer ng-d3, il vous suffit de la télécharger avec npm ou de télécharger le repository github.
 
-```javascript
-var data = [
-    [{
-        "x" : 100,
-        "y" : 50
-    }, {
-        ...
-    }],
-    [...]
-];
+###Loading
+Pour charger ng-d3 ajouter simplement la librairie (pas de dépendance nécessaire ! Si d3.js est déja installer il utilisera la version utilisé, si non il loadera la dernière version).
+
+```html
+<link rel="stylesheet" href="path/to/src/ng-d3.min.css" />
+<script type="text/javascript" src="path/to/src/ng-d3.min.js"></script>
 ```
 
-*todo : <s>Réfléchir à un mode de données empirique possible comparable au bubble chart, avec seulement un enfant proposé</s>*
+### Using
+Une fois ng-d3 chargé vous n'avez plus qu'a préparer votre directive et y injecter les paramètres voulus.
 
-### Autres visualisations envisagés
-- [force-collapsible chart](http://mbostock.github.io/d3/talk/20111116/force-collapsible.html) (parent / enfant)
+A chaque fois que $scope.parameter sera mis à jour, le chart s'updatera.
 
-<img src="http://4.bp.blogspot.com/-xUqRyt88dDs/UT9meyW00jI/AAAAAAAAAIo/7wZ09JZv-y0/s1600/force03.png">
-
-- [radviz](https://github.com/biovisualize/radviz) (matriciel)
-
-<img src="https://raw.githubusercontent.com/biovisualize/radviz/master/img/radviz.jpg" style="width:60%;">
-
-
-## features
-### All charts
-
-*Options :*
-
-* Width / Height (responsive)
-* Légende
-* Hover metrics
- * show data
- * show metric name
-
-### Chord diagram
-* Tableau permettant d'afficher les donées de façon plus précise
-
-### Surbunst / Bubble
-* Parents menant à un enfant au hover
+*demoController.js*
 
 ```javascript
-var options = {
-    legende : true,
-    hover   : {
-        template : 'show_data_metric'
-    },
-    chord : {
-        table : true
-    },
-    sunburst : {
-        legend : {
-            deep : true
+angular
+    .module('Demo')
+    .controller('DemoController', demoController);
+
+demoController.$inject = ['$scope'];
+
+function demoController($scope) {
+    $scope.parameters = {
+        chart: 'bubble',
+        data: data,
+        options: {
+            supports: [
+                {key:'referal', name: 'Referal', color: '#ab4880'},
+                {key:'seo', name: 'Seo', color: '#5aab76'},
+                {key:'sea', name: 'Sea', color: '#50a0cd'}
+            ],
+            legend: {
+                enable: true,
+                position: 'right',
+                width: 0.5,
+                columns: [
+                    {'name': 'relation', 'head': 'Cannaux', 'text-align': 'left'},
+                    {'name': 'value', 'head': 'Transactions', 'text-align': 'center'},
+                    {'name': 'relativeValue', 'head': '% du total', 'text-align': 'center'}
+                ],
+                desc: 'des visites totales'
+            }
         }
-    }
-};
+    };
+}
 ```
 
-## Pistes de réfléctions
-- Ne pas s'appuyer sur une modèle de données unique mais adapter le bon chart selon le modèle de données reçu.
-- Ne pas essayer de faire le café en faisant un modèle de donnée qui s'adaptera à tout les charts : chaque chart existe pour représenter un modèle différent !
-- Séparer les charts en type de format de données et ce qu'ils peuvent représenter : un **chord** mettra en exergue des relations communes entres plusieurs entitées alors qu'un **bubble** ou un **sunburst** mette en avant des relations parents / enfants et leurs repartions par volume.
-- **Modèles de données :**
- - Modèle de relations parents enfants (inscrites dans un scope global)
- - Modèle de relations matrixiel
- - Modèle de relations basés sur un axe x (progression) y (volume)
+*index.html*
 
-## Ressources
-- [article] [bocoup](https://bocoup.com/weblog/reusability-with-d3) : Exploring Reusability with D3.js
-- [article] [Mike Bostock](https://bost.ocks.org/mike/chart/) : Towards Reusable Charts
-- [library] [misoproject](http://misoproject.com/d3-chart/tutorials/definechart) : Librairie permettant de faire des charts réutilisables
+```html
+<ng-d3 parameters="parameters"></ng-d3>
+```
+
+## Documentation
+
+### Base
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| chart |String (*required*)|null|Le type de chart rendu. Voir les [types de charts disponibles]()|
+| data |data (*required*)|null|Les données du chart|
+
+### Options
+Les options sont à renseigner dans **`parameters.options`**
+
+#### options.supports
+Array d'objet 
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| key | String |null|La key corespondant au données|
+| name | String|null|Le nom de la data corespondante|
+| color | String |null|La couleur du support en hexadecimal|
+
+#### options.legend
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| enable | Bool |true|Autorise l'affichage de la légende|
+| position | String|right| right, left, top, bottom. Position de la légende  |
+| width | Number |0.2|Width de la légende en pourcentage|
+| desc | String | of the total | description pour le sunburst |
+
+## Todo
+[ ] Créer des template css
+[ ] Personalisation de la légende via des fonctions
+[ ] Améliorer le responsive

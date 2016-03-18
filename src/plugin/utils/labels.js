@@ -30,6 +30,8 @@ var Tooltip = function Tooltip() {
             .style('padding', '10px')
             .style('background-color', 'rgba(250, 250, 250, 0.95)')
             .style('border', '1px solid rgba(0, 0, 0, 0.1)')
+            .style('border-radius', '5px')
+            .style('box-shadow', '0 0 10px rgba(0,0,0,0.2)')
             .style('font', '10px sans-serif')
             .text('tooltip');
 
@@ -88,7 +90,7 @@ var Tooltip = function Tooltip() {
      * @return {Object} self
      */
     function mouseoverTooltip(chart, d) {
-        var color = chart.options.color[d.packageName] ? chart.options.color[d.packageName] : '#F0F0F0';
+        var color = _.find(chart.options.supports, {key: d.className}) ? _.find(chart.options.supports, {key: d.className}).color : '#F0F0F0';
 
         self.tooltip.text(d.className + ': ' + pvs.format(d.value));
         self.tooltip.style('opacity', '1');

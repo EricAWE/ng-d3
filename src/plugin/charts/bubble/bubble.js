@@ -54,13 +54,59 @@ module.exports = function(ngD3) {
      *
      * @param  {Object} data
      */
-    function update(newData) {
+    function update(newData, options) {
+
+        if (options) {
+            self.options = options;
+            self.width(self.options.width || 800);
+            self.height(self.options.height || 500);
+            legend.parameters = _.extend(legend.parameters, self.options.legend);
+        }
 
         if (newData) {
             pvs.data = newData;
         }
 
-        self.render();
+        self.supports = ngD3.helpers.chord.sortSupports(pvs.data, self.options.supports);
+
+        if (!pvs.bubbleData) {
+            self.render();
+        }
+        else {
+            legend.renderGenealogic();
+            _transition();
+        }
+    }
+
+    /**
+     * @private
+     * Fait la transition pour le bubble
+     *
+     * @param  {Object} old
+     */
+    function _transition() {
+        pvs.bubble.size([self.width(), self.height()]);
+        pvs.bubbleData = pvs.bubble.nodes(ngD3.helpers.bubble.classes(pvs.data));
+
+        pvs.svg
+            .transition()
+            .duration(300)
+            .attr('width', self.width())
+            .attr('height', self.height());
+
+        pvs.svg.selectAll('.node')
+            .data(pvs.bubbleData
+                .filter(function(d) { return !d.children; }))
+                .transition()
+                .duration(400)
+                .attr('transform', function(d) { return 'translate(' + d.x + ',' + d.y + ')'; });
+
+        pvs.svg.selectAll('.circle')
+            .data(pvs.bubbleData
+            .filter(function(d) { return !d.children; }))
+            .transition()
+            .duration(400)
+            .attr('r', function(d) { return d.r; });
     }
 
     /**
@@ -74,6 +120,7 @@ module.exports = function(ngD3) {
 
         pvs.bubble.size([pvs.width, pvs.height]);
         pvs.svg = legend.placeChart();
+        pvs.bubbleData = pvs.bubble.nodes(ngD3.helpers.bubble.classes(pvs.data));
 
         pvs.svg
             .attr('width', pvs.width)
@@ -81,15 +128,26 @@ module.exports = function(ngD3) {
             .attr('class', 'bubble');
 
         var node = pvs.svg.selectAll('.node')
-            .data(pvs.bubble.nodes(ngD3.helpers.bubble.classes(pvs.data))
+            .data(pvs.bubbleData
             .filter(function(d) { return !d.children; }))
             .enter().append('g')
                 .attr('class', 'node')
-                .attr('transform', function(d) { return 'translate(' + d.x + ',' + d.y + ')'; });
+                .attr('transform', function() { return 'translate(' + self.height() / 2 + ',' + self.width() / 2 + ')'; });
 
-        node.append('circle')
-            .attr('r', function(d) { return d.r; })
-            .style('fill', function(d) { return self.options.color[d.packageName] ? self.options.color[d.packageName] : '#F0F0F0'; });
+        var circles = node.append('circle')
+            .attr('class', 'circle')
+            .attr('r', function() { return 0; })
+            .style('fill', function(d) { return _.find(self.supports, {key: d.className}) ? _.find(self.supports, {key: d.className}).color : '#F0F0F0'; });
+
+        node
+            .transition()
+            .duration(300)
+            .attr('transform', function(d) { return 'translate(' + d.x + ',' + d.y + ')'; });
+
+        circles
+            .transition()
+            .duration(500)
+            .attr('r', function(d) { return d.r; });
 
         node.selectAll('circle')
            .on('mouseover', function(d) { ngD3.tooltip.mouseover(self, d); })

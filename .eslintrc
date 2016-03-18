@@ -9,7 +9,8 @@
         "require": true,
         "module": true,
         "exports": true,
-        "ƒ": true
+        "ƒ": true,
+        "ngD3": true
     },
     "rules": {
         "max-statements": [2, 30]
