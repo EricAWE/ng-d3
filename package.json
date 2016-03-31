@@ -1,8 +1,8 @@
 {
-  "name": "chartify",
-  "version": "0.0.1",
+  "name": "ng-d3",
+  "version": "0.1.0",
   "description": "chartify is an angular plugin for embed some D3.js charts",
-  "main": "index.js",
+  "main": "dist/ng-d3.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
