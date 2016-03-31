@@ -108,9 +108,11 @@ var Helpers = function Helpers() {
      */
     function classesChord(root) {
         var data = [];
+        var test = [];
 
         root.children = _completeResults(root.children);
         root.children.forEach(function(children) {
+            test.push(children.name);
             var childArray = [];
 
             children.children.forEach(function(value) {
@@ -132,8 +134,10 @@ var Helpers = function Helpers() {
     function _completeResults(data) {
         var isExist;
         var newChild;
+        var uniquesNames = _.map(data, function(d) { return d.name; });
         var uniques = _.chain(data)
             .map(function(d) { return _.map(d.children, function(v) { return v.name; }); })
+            .concat(uniquesNames)
             .flatten()
             .uniq()
             .value();
@@ -153,7 +157,7 @@ var Helpers = function Helpers() {
                 }
 
                 _.forEach(uniques, function(key) {
-                    var isKeyExist = _.find(child.children, {name: key});
+                    var isKeyExist = _.find(v.children, {name: key});
 
                     if (!isKeyExist) {
                         data[i].children.push({name: key, size: 0});

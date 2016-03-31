@@ -28,11 +28,17 @@ gulp.task('browserify', function() {
         .on('error', onError)
         .pipe($.rename('ng-d3.js'))
 		.pipe(gulp.dest(paths.dist.js))
+        .pipe($.uglify())
+        .pipe($.rename('ng-d3.min.js'))
+        .pipe(gulp.dest(paths.dist.js));
 });
 
 gulp.task('css', function() {
     gulp.src(paths.src.js + '/css/ng-d3.css')
+        .pipe($.rename('ng-d3.css'))
+        .pipe(gulp.dest(paths.dist.js))
         .pipe($.cleanCss())
+        .pipe($.rename('ng-d3.min.css'))
         .pipe(gulp.dest(paths.dist.js));
 });
 

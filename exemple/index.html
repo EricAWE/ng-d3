@@ -4,8 +4,8 @@
         <meta charset="utf-8">
         <title>D3 Wrapper</title>
         <script src="../node_modules/angular/angular.min.js"></script>
-        <script src="../dist/ng-d3.js"></script>
-        <link rel="stylesheet" href="../dist/ng-d3.css" />
+        <script src="../dist/ng-d3.min.js"></script>
+        <link rel="stylesheet" href="../dist/ng-d3.min.css" />
         <style>
             body { font: 14px sans-serif; color : #383838; }
             .chord path { fill-opacity: .67; stroke: #000; stroke-width: .5px; }
@@ -73,15 +73,652 @@
                 ]
             };
 
+            var test  = {
+                      "chart": "chord",
+                      "data": {
+                        "name": "mcf",
+                        "children": [
+                          {
+                            "name": "m.facebook.com / referral",
+                            "children": [
+                              {
+                                "name": "m.facebook.com / referral",
+                                "size": 4
+                              }
+                            ]
+                          },
+                          {
+                            "name": "mb-01-mail.net / referral",
+                            "children": [
+                              {
+                                "name": "mb-01-mail.net / referral",
+                                "size": 14
+                              },
+                              {
+                                "name": "google / organic",
+                                "size": 1
+                              }
+                            ]
+                          },
+                          {
+                            "name": "duckduckgo.com / referral",
+                            "children": [
+                              {
+                                "name": "duckduckgo.com / referral",
+                                "size": 6
+                              },
+                              {
+                                "name": "(direct) / (none)",
+                                "size": 1
+                              }
+                            ]
+                          },
+                          {
+                            "name": "firmeinfos.com / referral",
+                            "children": [
+                              {
+                                "name": "firmeinfos.com / referral",
+                                "size": 2
+                              }
+                            ]
+                          },
+                          {
+                            "name": "pagesjaunes.fr / referral",
+                            "children": [
+                              {
+                                "name": "pagesjaunes.fr / referral",
+                                "size": 2
+                              },
+                              {
+                                "name": "yahoo / organic",
+                                "size": 3
+                              }
+                            ]
+                          },
+                          {
+                            "name": "cylex-france.fr / referral",
+                            "children": [
+                              {
+                                "name": "cylex-france.fr / referral",
+                                "size": 2
+                              }
+                            ]
+                          },
+                          {
+                            "name": "secure-surf.com / referral",
+                            "children": [
+                              {
+                                "name": "secure-surf.com / referral",
+                                "size": 1
+                              }
+                            ]
+                          },
+                          {
+                            "name": "m.pagesjaunes.fr / referral",
+                            "children": [
+                              {
+                                "name": "fr.mappy.com / referral",
+                                "size": 2
+                              }
+                            ]
+                          },
+                          {
+                            "name": "images.google.de / referral",
+                            "children": [
+                              {
+                                "name": "images.google.de / referral",
+                                "size": 1
+                              }
+                            ]
+                          },
+                          {
+                            "name": "images.google.fr / referral",
+                            "children": [
+                              {
+                                "name": "images.google.fr / referral",
+                                "size": 1
+                              },
+                              {
+                                "name": "google / cpc",
+                                "size": 6
+                              },
+                              {
+                                "name": "google / organic",
+                                "size": 7
+                              },
+                              {
+                                "name": "images.google / organic",
+                                "size": 25
+                              },
+                              {
+                                "name": "duckduckgo.com / referral",
+                                "size": 1
+                              },
+                              {
+                                "name": "(direct) / (none)",
+                                "size": 2
+                              }
+                            ]
+                          },
+                          {
+                            "name": "google / cpc",
+                            "children": [
+                              {
+                                "name": "google / cpc",
+                                "size": 1240
+                              },
+                              {
+                                "name": "images.google / organic",
+                                "size": 14
+                              },
+                              {
+                                "name": "algeco.com / referral",
+                                "size": 19
+                              },
+                              {
+                                "name": "google / organic",
+                                "size": 252
+                              },
+                              {
+                                "name": "google / display",
+                                "size": 6
+                              },
+                              {
+                                "name": "(direct) / (none)",
+                                "size": 121
+                              },
+                              {
+                                "name": "yahoo / organic",
+                                "size": 2
+                              },
+                              {
+                                "name": "algecoscotsman.com / referral",
+                                "size": 1
+                              }
+                            ]
+                          },
+                          {
+                            "name": "bing / organic",
+                            "children": [
+                              {
+                                "name": "bing / organic",
+                                "size": 90
+                              },
+                              {
+                                "name": "google / cpc",
+                                "size": 14
+                              },
+                              {
+                                "name": "(direct) / (none)",
+                                "size": 5
+                              },
+                              {
+                                "name": "yahoo / organic",
+                                "size": 1
+                              },
+                              {
+                                "name": "google / organic",
+                                "size": 2
+                              },
+                              {
+                                "name": "algeco.com / referral",
+                                "size": 1
+                              }
+                            ]
+                          },
+                          {
+                            "name": "yahoo / organic",
+                            "children": [
+                              {
+                                "name": "yahoo / organic",
+                                "size": 34
+                              },
+                              {
+                                "name": "(direct) / (none)",
+                                "size": 2
+                              },
+                              {
+                                "name": "google / organic",
+                                "size": 2
+                              }
+                            ]
+                          },
+                          {
+                            "name": "(direct) / (none)",
+                            "children": [
+                              {
+                                "name": "(direct) / (none)",
+                                "size": 212
+                              },
+                              {
+                                "name": "google / organic",
+                                "size": 6
+                              },
+                              {
+                                "name": "google / cpc",
+                                "size": 15
+                              },
+                              {
+                                "name": "bing / organic",
+                                "size": 2
+                              }
+                            ]
+                          },
+                          {
+                            "name": "google / organic",
+                            "children": [
+                              {
+                                "name": "google / organic",
+                                "size": 1384
+                              },
+                              {
+                                "name": "google / cpc",
+                                "size": 113
+                              },
+                              {
+                                "name": "(direct) / (none)",
+                                "size": 143
+                              },
+                              {
+                                "name": "images.google / organic",
+                                "size": 12
+                              },
+                              {
+                                "name": "algeco.com / referral",
+                                "size": 2
+                              },
+                              {
+                                "name": "bing / organic",
+                                "size": 2
+                              },
+                              {
+                                "name": "google / display",
+                                "size": 5
+                              },
+                              {
+                                "name": "facebook.com / referral",
+                                "size": 1
+                              },
+                              {
+                                "name": "images.google.fr / referral",
+                                "size": 4
+                              }
+                            ]
+                          },
+                          {
+                            "name": "google / display",
+                            "children": [
+                              {
+                                "name": "google / display",
+                                "size": 2
+                              },
+                              {
+                                "name": "(direct) / (none)",
+                                "size": 1
+                              }
+                            ]
+                          },
+                          {
+                            "name": "bing.com / referral",
+                            "children": [
+                              {
+                                "name": "bing.com / referral",
+                                "size": 3
+                              }
+                            ]
+                          },
+                          {
+                            "name": "algeco.be / referral",
+                            "children": [
+                              {
+                                "name": "google / organic",
+                                "size": 1
+                              }
+                            ]
+                          },
+                          {
+                            "name": "algeco.com / referral",
+                            "children": [
+                              {
+                                "name": "algeco.com / referral",
+                                "size": 6
+                              },
+                              {
+                                "name": "(direct) / (none)",
+                                "size": 1
+                              },
+                              {
+                                "name": "google / organic",
+                                "size": 4
+                              }
+                            ]
+                          },
+                          {
+                            "name": "iglobal.co / referral",
+                            "children": [
+                              {
+                                "name": "iglobal.co / referral",
+                                "size": 1
+                              }
+                            ]
+                          },
+                          {
+                            "name": "ustart.org / referral",
+                            "children": [
+                              {
+                                "name": "ustart.org / referral",
+                                "size": 1
+                              }
+                            ]
+                          },
+                          {
+                            "name": "batiweb.com / referral",
+                            "children": [
+                              {
+                                "name": "batiweb.com / referral",
+                                "size": 2
+                              },
+                              {
+                                "name": "google / cpc",
+                                "size": 1
+                              }
+                            ]
+                          },
+                          {
+                            "name": "archiexpo.it / referral",
+                            "children": [
+                              {
+                                "name": "archiexpo.it / referral",
+                                "size": 1
+                              }
+                            ]
+                          },
+                          {
+                            "name": "facebook.com / referral",
+                            "children": [
+                              {
+                                "name": "facebook.com / referral",
+                                "size": 1
+                              }
+                            ]
+                          },
+                          {
+                            "name": "images.google / organic",
+                            "children": [
+                              {
+                                "name": "images.google / organic",
+                                "size": 5
+                              },
+                              {
+                                "name": "google / cpc",
+                                "size": 1
+                              },
+                              {
+                                "name": "google / organic",
+                                "size": 2
+                              }
+                            ]
+                          },
+                          {
+                            "name": "linkedin.com / referral",
+                            "children": [
+                              {
+                                "name": "linkedin.com / referral",
+                                "size": 1
+                              }
+                            ]
+                          },
+                          {
+                            "name": "algecoscotsman.com / referral",
+                            "children": [
+                              {
+                                "name": "algecoscotsman.com / referral",
+                                "size": 2
+                              }
+                            ]
+                          },
+                          {
+                            "name": "soa-architectes.fr / referral",
+                            "children": [
+                              {
+                                "name": "(direct) / (none)",
+                                "size": 1
+                              }
+                            ]
+                          },
+                          {
+                            "name": "fr.search.yahoo.com / referral",
+                            "children": [
+                              {
+                                "name": "fr.search.yahoo.com / referral",
+                                "size": 2
+                              }
+                            ]
+                          },
+                          {
+                            "name": "maison.architecteo.com / referral",
+                            "children": [
+                              {
+                                "name": "maison.architecteo.com / referral",
+                                "size": 4
+                              },
+                              {
+                                "name": "(direct) / (none)",
+                                "size": 1
+                              },
+                              {
+                                "name": "google / organic",
+                                "size": 1
+                              }
+                            ]
+                          },
+                          {
+                            "name": "benjamin.lisan.free.fr / referral",
+                            "children": [
+                              {
+                                "name": "benjamin.lisan.free.fr / referral",
+                                "size": 1
+                              }
+                            ]
+                          },
+                          {
+                            "name": "globalbb.onesource.com / referral",
+                            "children": [
+                              {
+                                "name": "globalbb.onesource.com / referral",
+                                "size": 1
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "options": {
+                        "supports": [
+                          {
+                            "name": "m.facebook.com / referral",
+                            "key": "m.facebook.com / referral",
+                            "color": "#3daadf"
+                          },
+                          {
+                            "name": "mb-01-mail.net / referral",
+                            "key": "mb-01-mail.net / referral",
+                            "color": "#fd5154"
+                          },
+                          {
+                            "name": "duckduckgo.com / referral",
+                            "key": "duckduckgo.com / referral",
+                            "color": "#59da80"
+                          },
+                          {
+                            "name": "firmeinfos.com / referral",
+                            "key": "firmeinfos.com / referral",
+                            "color": "#f5af05"
+                          },
+                          {
+                            "name": "pagesjaunes.fr / referral",
+                            "key": "pagesjaunes.fr / referral",
+                            "color": "#8e44ad"
+                          },
+                          {
+                            "name": "cylex-france.fr / referral",
+                            "key": "cylex-france.fr / referral",
+                            "color": "#F89406"
+                          },
+                          {
+                            "name": "secure-surf.com / referral",
+                            "key": "secure-surf.com / referral",
+                            "color": "#1abc9c"
+                          },
+                          {
+                            "name": "m.pagesjaunes.fr / referral",
+                            "key": "m.pagesjaunes.fr / referral",
+                            "color": "#5b5b5b"
+                          },
+                          {
+                            "name": "images.google.de / referral",
+                            "key": "images.google.de / referral",
+                            "color": "#3daadf"
+                          },
+                          {
+                            "name": "images.google.fr / referral",
+                            "key": "images.google.fr / referral",
+                            "color": "#fd5154"
+                          },
+                          {
+                            "name": "google / cpc",
+                            "key": "google / cpc",
+                            "color": "#59da80"
+                          },
+                          {
+                            "name": "bing / organic",
+                            "key": "bing / organic",
+                            "color": "#f5af05"
+                          },
+                          {
+                            "name": "yahoo / organic",
+                            "key": "yahoo / organic",
+                            "color": "#8e44ad"
+                          },
+                          {
+                            "name": "(direct) / (none)",
+                            "key": "(direct) / (none)",
+                            "color": "#F89406"
+                          },
+                          {
+                            "name": "google / organic",
+                            "key": "google / organic",
+                            "color": "#1abc9c"
+                          },
+                          {
+                            "name": "google / display",
+                            "key": "google / display",
+                            "color": "#5b5b5b"
+                          },
+                          {
+                            "name": "bing.com / referral",
+                            "key": "bing.com / referral",
+                            "color": "#3daadf"
+                          },
+                          {
+                            "name": "algeco.be / referral",
+                            "key": "algeco.be / referral",
+                            "color": "#fd5154"
+                          },
+                          {
+                            "name": "algeco.com / referral",
+                            "key": "algeco.com / referral",
+                            "color": "#59da80"
+                          },
+                          {
+                            "name": "iglobal.co / referral",
+                            "key": "iglobal.co / referral",
+                            "color": "#f5af05"
+                          },
+                          {
+                            "name": "ustart.org / referral",
+                            "key": "ustart.org / referral",
+                            "color": "#8e44ad"
+                          },
+                          {
+                            "name": "batiweb.com / referral",
+                            "key": "batiweb.com / referral",
+                            "color": "#F89406"
+                          },
+                          {
+                            "name": "archiexpo.it / referral",
+                            "key": "archiexpo.it / referral",
+                            "color": "#1abc9c"
+                          },
+                          {
+                            "name": "facebook.com / referral",
+                            "key": "facebook.com / referral",
+                            "color": "#5b5b5b"
+                          },
+                          {
+                            "name": "images.google / organic",
+                            "key": "images.google / organic",
+                            "color": "#3daadf"
+                          },
+                          {
+                            "name": "linkedin.com / referral",
+                            "key": "linkedin.com / referral",
+                            "color": "#fd5154"
+                          },
+                          {
+                            "name": "algecoscotsman.com / referral",
+                            "key": "algecoscotsman.com / referral",
+                            "color": "#59da80"
+                          },
+                          {
+                            "name": "soa-architectes.fr / referral",
+                            "key": "soa-architectes.fr / referral",
+                            "color": "#f5af05"
+                          },
+                          {
+                            "name": "fr.search.yahoo.com / referral",
+                            "key": "fr.search.yahoo.com / referral",
+                            "color": "#8e44ad"
+                          },
+                          {
+                            "name": "maison.architecteo.com / referral",
+                            "key": "maison.architecteo.com / referral",
+                            "color": "#F89406"
+                          },
+                          {
+                            "name": "benjamin.lisan.free.fr / referral",
+                            "key": "benjamin.lisan.free.fr / referral",
+                            "color": "#1abc9c"
+                          },
+                          {
+                            "name": "globalbb.onesource.com / referral",
+                            "key": "globalbb.onesource.com / referral",
+                            "color": "#5b5b5b"
+                          }
+                        ],
+                        "legend": {
+                            "enable": true,
+                            "position": 'right',
+                            "width": 0.5,
+                            "columns": [
+                                {'name': 'relation', 'head': 'Cannaux', 'text-align': 'left'},
+                                {'name': 'value', 'head': 'Transactions', 'text-align': 'center'},
+                                {'name': 'relativeValue', 'head': '% du total', 'text-align': 'center'}
+                            ],
+                            "desc": 'of the total'
+                        }
+                      }
+                    }
+
             var parameters = {
                 chart: 'chord',
-                data: data,
+                data: test.data,
                 options: {
-                    supports: [
-                        {key:'referal', name: 'Referal', color: '#ab4880'},
-                        {key:'seo', name: 'Seo', color: '#5aab76'},
-                        {key:'sea', name: 'Sea', color: '#50a0cd'}
-                    ],
+                    supports: test.options.supports,
+                    // [
+                    //     {key:'referal', name: 'Referal', color: '#ab4880'},
+                    //     {key:'seo', name: 'Seo', color: '#5aab76'},
+                    //     {key:'sea', name: 'Sea', color: '#50a0cd'}
+                    // ],
                     legend: {
                         enable: true,
                         position: 'right',
@@ -106,7 +743,7 @@
             function demoController($scope, $timeout) {
                 var isData1 = true;
 
-                $scope.parameters = parameters;
+                $scope.parameters = test;
 
                 $scope.updateChart = function(chart) {
                     $scope.parameters.chart = chart;

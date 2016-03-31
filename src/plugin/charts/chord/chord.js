@@ -137,7 +137,7 @@ module.exports = function(ngD3) {
             .data(pvs.chord.chords)
             .transition()
             .duration(1500)
-            .style('fill', function(d) { return self.supports[d.source.index].color; })
+            .style('fill', function(d) { return _getColor(d.source.index); })
             .attrTween('d', ngD3.helpers.chord.chordTween(pvs.chordSvg, old));
 
         setTimeout(_drawTicks, 1100);
@@ -173,8 +173,8 @@ module.exports = function(ngD3) {
         g.append('path')
             .attr('class', 'arc')
             .attr('id', function(d) { return 'group' + d.index + '-' + groupIds; })
-            .style('fill', function(d) { return self.supports[d.index].color; })
-            .style('stroke', function(d) { return self.supports[d.index].color; })
+            .style('fill', function(d) { return _getColor(d.index); })
+            .style('stroke', function(d) { return _getColor(d.index); })
             .attr('d', pvs.arcSvg)
             .on('mouseover', _mouseover)
             .on('mouseout', _mouseout);
@@ -193,7 +193,7 @@ module.exports = function(ngD3) {
             .selectAll('path')
             .data(pvs.chord.chords)
             .enter().append('path')
-                .style('fill', function(d) { return self.supports[d.source.index].color; })
+                .style('fill', function(d) { return _getColor(d.source.index); })
                 .attr('d', pvs.chordSvg)
                 .style('opacity', 1);
 
@@ -203,6 +203,17 @@ module.exports = function(ngD3) {
         }
 
         _drawTicks();
+    }
+
+    /**
+     * @private
+     * Retourne la couleur pour le support
+     *
+     * @return {String} color
+     *
+     */
+    function _getColor(source) {
+        return self.supports[source] && self.supports[source].color ? self.supports[source].color : '#F0F0F0';
     }
 
     /**
