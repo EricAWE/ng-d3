@@ -9,7 +9,7 @@
                 width: null,
                 b: { w: 75, h: 30, s: 3, t: 10 }
             },
-            desc: 'yo'
+            desc: 'of the total'
         };
 
         /**
@@ -94,6 +94,7 @@
                 .attr('y', options.trail.b.h / 2)
                 .attr('dy', '0.35em')
                 .attr('text-anchor', 'middle')
+                .style('fill', '#ffffff')
                 .text(function(d) { return d.name; });
 
             // Set position for entering and updating nodes.

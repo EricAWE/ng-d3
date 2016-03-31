@@ -29,8 +29,7 @@
                         'name': 'seo',
                         'children': [
                             {'name': 'seo', 'size': 3938},
-                            {'name': 'sea', 'size': 10738},
-                            {'name': 'referal', 'size': 1200}
+                            {'name': 'referal', 'size': 200}
                         ]
                     },
                     {
@@ -39,14 +38,6 @@
                             {'name': 'seo', 'size': 1200},
                             {'name': 'sea', 'size': 10738},
                             {'name': 'referal', 'size': 2000}
-                        ]
-                    },
-                    {
-                        'name': 'referal',
-                        'children': [
-                            {'name': 'seo', 'size': 400},
-                            {'name': 'sea', 'size': 800},
-                            {'name': 'referal', 'size': 3000}
                         ]
                     }
                 ]
@@ -83,7 +74,7 @@
             };
 
             var parameters = {
-                chart: 'bubble',
+                chart: 'chord',
                 data: data,
                 options: {
                     supports: [
@@ -91,8 +82,6 @@
                         {key:'seo', name: 'Seo', color: '#5aab76'},
                         {key:'sea', name: 'Sea', color: '#50a0cd'}
                     ],
-                    // width: 900,
-                    // height: 400,
                     legend: {
                         enable: true,
                         position: 'right',

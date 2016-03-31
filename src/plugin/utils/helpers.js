@@ -109,6 +109,7 @@ var Helpers = function Helpers() {
     function classesChord(root) {
         var data = [];
 
+        root.children = _completeResults(root.children);
         root.children.forEach(function(children) {
             var childArray = [];
 
@@ -117,6 +118,48 @@ var Helpers = function Helpers() {
             });
 
             data.push(childArray);
+        });
+
+        return data;
+    }
+
+    /**
+     * Complete data that is uncomplete for the matrix
+     *
+     * @param  {Object} data
+     * @return {Object} children
+     */
+    function _completeResults(data) {
+        var isExist;
+        var newChild;
+        var uniques = _.chain(data)
+            .map(function(d) { return _.map(d.children, function(v) { return v.name; }); })
+            .flatten()
+            .uniq()
+            .value();
+
+        _.forEach(data, function(v, i) {
+            _.forEach(v.children, function(child) {
+                isExist = _.find(data, {name: child.name});
+
+                if (!isExist) {
+                    newChild = {name: child.name, children: []};
+
+                    _.forEach(uniques, function(key) {
+                        newChild.children.push({name: key, size: 0});
+                    });
+
+                    data.push(newChild);
+                }
+
+                _.forEach(uniques, function(key) {
+                    var isKeyExist = _.find(child.children, {name: key});
+
+                    if (!isKeyExist) {
+                        data[i].children.push({name: key, size: 0});
+                    }
+                });
+            });
         });
 
         return data;
