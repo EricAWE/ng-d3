@@ -79,7 +79,8 @@ module.exports = function(ngD3) {
             pvs.matrix = ngD3.helpers.chord.classes(newData);
         }
 
-        self.supports = ngD3.helpers.chord.sortSupports(pvs.data, self.options.supports);
+        self.supports = ngD3.helpers.generateSupports(self.options.supports, pvs.data, self.options.colors);
+        self.supports = ngD3.helpers.chord.sortSupports(pvs.data, self.supports);
 
         if (!pvs.chord.matrix()) {
             pvs.chord.matrix(pvs.matrix);

@@ -3,9 +3,9 @@
     <head>
         <meta charset="utf-8">
         <title>D3 Wrapper</title>
-        <script src="../node_modules/angular/angular.min.js"></script>
-        <script src="../dist/ng-d3.min.js"></script>
-        <link rel="stylesheet" href="../dist/ng-d3.min.css" />
+        <script src="../node_modules/angular/angular.js"></script>
+        <script src="../dist/ng-d3.js"></script>
+        <link rel="stylesheet" href="../dist/ng-d3.css" />
         <style>
             body { font: 14px sans-serif; color : #383838; }
             .chord path { fill-opacity: .67; stroke: #000; stroke-width: .5px; }
@@ -713,7 +713,8 @@
                 chart: 'chord',
                 data: test.data,
                 options: {
-                    supports: test.options.supports,
+                    supports: 'auto',
+                    colors: [ '#3daadf', '#fd5154', '#59da80', '#f5af05', '#8e44ad', '#F89406', '#1abc9c', '#5b5b5b'],
                     // [
                     //     {key:'referal', name: 'Referal', color: '#ab4880'},
                     //     {key:'seo', name: 'Seo', color: '#5aab76'},

@@ -1,6 +1,7 @@
 var Helpers = function Helpers() {
     'use strict';
 
+    var COLORS = ['#3daadf', '#fd5154', '#59da80', '#f5af05', '#8e44ad', '#F89406', '#1abc9c', '#5b5b5b'];
     var self = {
         chord: {
             classes: classesChord,
@@ -19,10 +20,46 @@ var Helpers = function Helpers() {
             getAncestors: getAncestors
         },
         lighten: lighten,
-        extend: extend
+        extend: extend,
+        generateSupports: generateSupports
     };
 
     return self;
+
+    /**
+     * Return supports generated
+     *
+     * @param  {Mixed} supports
+     * @param  {Array} colors
+     * @return {Array} supports
+     */
+    function generateSupports(_supports, data, _colors) {
+        var supports = [];
+        var support = {};
+        var colors = _colors || COLORS;
+
+        if (typeof _supports === 'Object') {
+            supports = _supports;
+        }
+        else {
+            var i = 0;
+            var uniques = _getUniquesSupports(data.children);
+
+            _.forEach(uniques, function(key) {
+                i = colors.length > i ? i : 0;
+                support = {
+                    name: key,
+                    key: key,
+                    color: colors[i]
+                };
+
+                supports.push(support);
+                i++;
+            });
+        }
+
+        return supports;
+    }
 
     /**
      * Lighten or darken an hexa color
@@ -134,13 +171,7 @@ var Helpers = function Helpers() {
     function _completeResults(data) {
         var isExist;
         var newChild;
-        var uniquesNames = _.map(data, function(d) { return d.name; });
-        var uniques = _.chain(data)
-            .map(function(d) { return _.map(d.children, function(v) { return v.name; }); })
-            .concat(uniquesNames)
-            .flatten()
-            .uniq()
-            .value();
+        var uniques = _getUniquesSupports(data);
 
         _.forEach(data, function(v, i) {
             _.forEach(v.children, function(child) {
@@ -167,6 +198,24 @@ var Helpers = function Helpers() {
         });
 
         return data;
+    }
+
+    /**
+     * Returns unqiues supports
+     *
+     * @param  {Object} data
+     * @return {Array} uniques
+     */
+    function _getUniquesSupports(data) {
+        var uniquesNames = _.map(data, function(d) { return d.name; });
+        var uniques = _.chain(data)
+            .map(function(d) { return _.map(d.children, function(v) { return v.name; }); })
+            .concat(uniquesNames)
+            .flatten()
+            .uniq()
+            .value();
+
+        return uniques;
     }
 
     /**

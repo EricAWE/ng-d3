@@ -72,7 +72,8 @@ module.exports = function(ngD3) {
             pvt.data = newData;
         }
 
-        self.supports = ngD3.helpers.chord.sortSupports(pvt.data, self.options.supports);
+        self.supports = ngD3.helpers.generateSupports(self.options.supports, pvt.data, self.options.colors);
+        self.supports = ngD3.helpers.chord.sortSupports(pvt.data, self.supports);
 
         if (!pvt.arc) {
             self.render();

@@ -43,7 +43,10 @@
             var columns = pvs.parent.parameters.columns;
 
             // On sort les data pour le rendu dans le tableau
-            var data = _.orderBy(supportData.children, ['size'], ['desc']);
+            var data = _.chain(supportData.children)
+                .filter(function(d) { return d.size !== 0; })
+                .orderBy(['size'], ['desc'])
+                .value();
 
             self.element.append('tbody')
                 .selectAll('tr')

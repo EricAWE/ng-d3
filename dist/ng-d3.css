@@ -54,6 +54,7 @@
 .ngD3-legend-table {
     background-color: #f8f8f8;
     opacity: 0;
+    overflow-y: scroll;
 }
 
 .ngD3-legend-table table {

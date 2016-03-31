@@ -67,7 +67,8 @@ module.exports = function(ngD3) {
             pvs.data = newData;
         }
 
-        self.supports = ngD3.helpers.chord.sortSupports(pvs.data, self.options.supports);
+        self.supports = ngD3.helpers.generateSupports(self.options.supports, pvs.data, self.options.colors);
+        self.supports = ngD3.helpers.chord.sortSupports(pvs.data, self.supports);
 
         if (!pvs.bubbleData) {
             self.render();
