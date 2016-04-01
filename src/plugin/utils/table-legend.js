@@ -168,7 +168,6 @@
                     .style('text-align', function(d) { return d['text-align'] || 'left'; })
                     .text(ƒ('head'));
 
-            console.log(self.element);
             d3.select(self.element.node().parentNode)
                 .transition()
                 .duration(600)
