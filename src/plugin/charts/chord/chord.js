@@ -357,6 +357,8 @@ module.exports = function(ngD3) {
 
         pvs.height = newHeight;
         pvs.svg.attr('height', pvs.height);
+        d3.select(pvs.svg.node().parentNode).attr('height', pvs.height);
+
         _setRadius();
 
         return self;

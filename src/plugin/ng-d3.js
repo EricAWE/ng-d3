@@ -17,6 +17,7 @@
             self.helpers = require('./utils/helpers');
             self.tooltip = require('./utils/labels');
             self.legend = require('./utils/legend');
+            self.resize = require('./utils/resizer');
 
             // Import des différents charts
             d3.chart.chord = require('./charts/chord/chord');
@@ -32,14 +33,13 @@
          */
         self.build = function buildNgD3(parameters) {
             var chart = d3.chart[parameters.chart](self);
+            var container = document.getElementsByClassName(parameters.options.container.split('.')[1])[0].parentElement;
 
             chart.init(parameters.options);
             chart.update(parameters.data);
 
             // Gestion du responsive
-            var container = document.getElementsByClassName(parameters.options.container.split('.')[1])[0].parentElement;
-
-            window.onresize = function() { self.updateChart(chart, container); };
+            self.resize.addListener(container, function() { self.updateChart(chart, container); });
 
             return chart;
         };
@@ -54,6 +54,7 @@
          */
         self.updateChart = function(chart, container) {
             var size = { width: container.clientWidth, height: container.clientHeight };
+            console.log(size);
 
             chart.width(size.width);
             chart.height(size.height);
