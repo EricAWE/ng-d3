@@ -54,7 +54,6 @@
          */
         self.updateChart = function(chart, container) {
             var size = { width: container.clientWidth, height: container.clientHeight };
-            console.log(size);
 
             chart.width(size.width);
             chart.height(size.height);
