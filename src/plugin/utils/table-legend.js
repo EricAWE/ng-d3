@@ -168,12 +168,11 @@
                     .style('text-align', function(d) { return d['text-align'] || 'left'; })
                     .text(ƒ('head'));
 
-            setTimeout(function() {
-                d3.select(self.element.node().parentNode)
-                    .transition()
-                    .duration(600)
-                    .style('opacity', 1);
-            }, 100);
+            console.log(self.element);
+            d3.select(self.element.node().parentNode)
+                .transition()
+                .duration(600)
+                .style('opacity', 1);
         }
     };
 
