@@ -36,9 +36,10 @@
             var container = document.getElementsByClassName(parameters.options.container.split('.')[1])[0].parentElement;
             var size = { width: container.clientWidth, height: container.clientHeight };
 
+            console.log(parameters.options.height, size.height);
+            parameters.options.width = parameters.options.width || size.width;
+            parameters.options.height = parameters.options.height || size.height;
             chart.init(parameters.options);
-            chart.width(size.width);
-            chart.height(size.height);
             chart.update(parameters.data);
 
             // Gestion du responsive
