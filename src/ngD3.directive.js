@@ -47,6 +47,9 @@
 
 
                 if (newParams && i > 0) {
+                    newParams.options.width = newParams.options.width || element.parent()[0].clientWidth;
+                    newParams.options.height = newParams.options.height || element.parent()[0].clientHeight;
+
                     chart.update(angular.copy(newParams.data), newParams.options);
                     // Si le chart type change, on supprime le contenue de la div,
                     // on renitialise complétement le chart
