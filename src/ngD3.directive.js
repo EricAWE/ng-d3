@@ -45,8 +45,9 @@
 
             scope.$watch('parameters', function(newParams, oldParams) {
 
-
+                console.log('salut');
                 if (newParams && i > 0) {
+                    console.log('salut2');
                     newParams.options.width = newParams.options.width || element.parent()[0].clientWidth;
                     newParams.options.height = newParams.options.height || element.parent()[0].clientHeight;
 
