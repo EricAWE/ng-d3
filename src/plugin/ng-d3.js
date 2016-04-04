@@ -34,8 +34,11 @@
         self.build = function buildNgD3(parameters) {
             var chart = d3.chart[parameters.chart](self);
             var container = document.getElementsByClassName(parameters.options.container.split('.')[1])[0].parentElement;
+            var size = { width: container.clientWidth, height: container.clientHeight };
 
             chart.init(parameters.options);
+            chart.width(size.width);
+            chart.height(size.height);
             chart.update(parameters.data);
 
             // Gestion du responsive
