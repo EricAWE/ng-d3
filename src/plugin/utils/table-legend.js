@@ -168,10 +168,12 @@
                     .style('text-align', function(d) { return d['text-align'] || 'left'; })
                     .text(ƒ('head'));
 
-            d3.select(self.element.node().parentNode)
-                .transition()
-                .duration(600)
-                .style('opacity', 1);
+            if (self.element.node()) {
+                d3.select(self.element.node().parentNode)
+                    .transition()
+                    .duration(600)
+                    .style('opacity', 1);
+            }
         }
     };
 
