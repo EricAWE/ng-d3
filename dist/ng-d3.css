@@ -58,6 +58,7 @@
 }
 
 .ngD3-legend-table table {
+    min-width: 450px;
     width: 100%;
     border-collapse: collapse;
 }
