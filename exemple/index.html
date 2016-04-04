@@ -696,7 +696,7 @@
                           }
                         ],
                         "legend": {
-                            "enable": false,
+                            "enable": true,
                             "position": 'right',
                             "width": 0.5,
                             "columns": [
@@ -745,6 +745,10 @@
                 var isData1 = true;
 
                 $scope.parameters = test;
+
+                $timeout(function () {
+                    $scope.parameters.options.legend.enable = false;
+                }, 1000);
 
                 $scope.updateChart = function(chart) {
                     $scope.parameters.chart = chart;
