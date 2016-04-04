@@ -51,6 +51,7 @@
             d3.select(chart.options.container).classed('ngD3-table-chart', true);
 
             console.log(chart.options.container);
+            console.log('enable : ' + self.parameters.enable);
             // Supprime la légende existante
             d3.select(chart.options.container)
                 .selectAll('.ngD3-legend-table')
