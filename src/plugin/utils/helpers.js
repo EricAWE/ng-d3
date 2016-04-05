@@ -355,7 +355,7 @@ var Helpers = function Helpers() {
         var groups = {
             1: {v: 1},
             2: {v: 1},
-            3: {v: 1},
+            3: {v: 10},
             4: {v: 100},
             5: {v: 1000},
         };
