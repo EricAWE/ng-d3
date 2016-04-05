@@ -201,6 +201,7 @@ module.exports = function(ngD3) {
                 .attr('x', 6)
                 .attr('dy', function() { return (fontSize / 2) + (radius / 2) - 2; })
                 .attr('font-size', fontSize + 'px')
+                .attr('fill', '#4d4d4d')
                 .style('pointer-events', 'none')
                 .filter(_filterChordName)
                 .append('textPath')
