@@ -65,7 +65,6 @@ module.exports = function(ngD3) {
      * @param  {Object} data
      */
     function update(newData, options) {
-
         if (options) {
             self.options = options;
             self.width(self.options.width || 800);
@@ -75,8 +74,14 @@ module.exports = function(ngD3) {
         }
 
         if (newData) {
+            newData.children = ngD3.helpers.chord.completeResults(newData.children);
             pvs.data = newData;
-            pvs.matrix = ngD3.helpers.chord.classes(newData);
+            pvs.matrix = ngD3.helpers.chord.classes(pvs.data);
+            pvs.maxResult = _.chain(pvs.data.children)
+                .map(function(d) { return _.map(d.children, function(o) { return o.size; }); })
+                .flattenDeep()
+                .max()
+                .value();
         }
 
         self.supports = ngD3.helpers.generateSupports(self.options.supports, pvs.data, self.options.colors);
@@ -264,7 +269,7 @@ module.exports = function(ngD3) {
             .enter()
                 .append('g')
                 .selectAll('g')
-                .data(ngD3.helpers.chord.groupTicks)
+                .data(function(d) { return ngD3.helpers.chord.groupTicks(d, pvs.maxResult); })
                 .enter()
                     .append('g')
                     .attr('transform', function(d) { return 'rotate(' + (d.angle * 180 / Math.PI - 90) + ')' + 'translate(' + pvs.outerRadius + ',0)'; });
@@ -274,11 +279,12 @@ module.exports = function(ngD3) {
             .attr('y1', 0)
             .attr('x2', 5)
             .attr('y2', 0)
-            .style('stroke', '#000');
+            .style('stroke', '#b9b9b9');
 
         ticks.append('text')
             .attr('x', 8)
             .attr('dy', '.35em')
+        .attr('fill', '#7f7f7f')
             .attr('text-anchor', function(d) { return d.angle > Math.PI ? 'end' : null; })
             .attr('transform', function(d) { return d.angle > Math.PI ? 'rotate(180)translate(-16)' : null; })
             .text(function(d) { return d.label; });

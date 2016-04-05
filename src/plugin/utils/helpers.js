@@ -9,7 +9,9 @@ var Helpers = function Helpers() {
             fade: fade,
             arcTween: arcTweenChord,
             chordTween: chordTween,
-            sortSupports: sortSupports
+            sortSupports: sortSupports,
+            recalculateData: recalculateData,
+            completeResults: _completeResults
         },
         bubble: {
             classes: classesBubble
@@ -25,6 +27,19 @@ var Helpers = function Helpers() {
     };
 
     return self;
+
+    /**
+     * recalculateData for the chord
+     *
+     * @param  {Object} supports
+     * @param  {Array}  oldData
+     * @return {Array}  data
+     */
+    function recalculateData(sortSupports, oldData) {
+        console.log(sortSupports, oldData);
+
+        return [];
+    }
 
     /**
      * Return supports generated
@@ -147,7 +162,6 @@ var Helpers = function Helpers() {
         var data = [];
         var test = [];
 
-        root.children = _completeResults(root.children);
         root.children.forEach(function(children) {
             test.push(children.name);
             var childArray = [];
@@ -171,8 +185,10 @@ var Helpers = function Helpers() {
     function _completeResults(data) {
         var isExist;
         var newChild;
+        var oldChild;
         var uniques = _getUniquesSupports(data);
 
+        // Attribution d'une valeur à zéro si la valeur n'existe pas
         _.forEach(data, function(v, i) {
             _.forEach(v.children, function(child) {
                 isExist = _.find(data, {name: child.name});
@@ -195,6 +211,18 @@ var Helpers = function Helpers() {
                     }
                 });
             });
+        });
+
+        // Range ensuite les data dans le même ordre
+        // pour éviter toutes confusions avec la matrix
+        _.forEach(data, function(v, i) {
+            newChild = [];
+            _.forEach(uniques, function(key) {
+                oldChild = _.find(v.children, {'name': key});
+                newChild.push(oldChild);
+            });
+
+            data[i].children = newChild;
         });
 
         return data;
@@ -323,15 +351,33 @@ var Helpers = function Helpers() {
      *
      * @param {Object} data
      */
-    function groupTicks(d) {
+    function groupTicks(d, maxResult) {
+        var groups = {
+            1: {v: 1},
+            2: {v: 1},
+            3: {v: 1},
+            4: {v: 100},
+            5: {v: 1000},
+        };
+        var group = groups[maxResult.toString().length];
         var k = (d.endAngle - d.startAngle) / d.value;
 
-        return d3.range(0, d.value, 1000).map(function(v, i) {
+        return d3.range(0, d.value, group.v).map(function(v, i) {
             return {
                 angle: v * k + d.startAngle,
-                label: i % 5 ? null : v / 1000 + 'k'
+                label: i % 5 || v === 0 ? null : _formatKilo(v)
             };
         });
+    }
+
+    /**
+     * Format number in kilo if > 1000
+     *
+     * @param  {Number} num
+     * @return {Number} result
+     */
+    function _formatKilo(num) {
+        return num > 999 ? num / 1000 + 'k' : num;
     }
 
     /**
