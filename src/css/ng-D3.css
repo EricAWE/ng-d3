@@ -9,7 +9,7 @@
     height: 100%;
 }
 
-.ngD3-container .chord path { fill-opacity: .67; stroke: #000; stroke-width: .5px; }
+.ngD3-container .chord path { fill-opacity: .67; stroke: rgba(0, 0, 0, 0.4); stroke-width: .5px; }
 
 .ngD3-animate {
     transition: opacity 0.2s ease;

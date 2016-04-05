@@ -65,6 +65,8 @@ module.exports = function(ngD3) {
      * @param  {Object} data
      */
     function update(newData, options) {
+        var arrayValue = [];
+
         if (options) {
             self.options = options;
             self.width(self.options.width || 800);
@@ -77,11 +79,13 @@ module.exports = function(ngD3) {
             newData.children = ngD3.helpers.chord.completeResults(newData.children);
             pvs.data = newData;
             pvs.matrix = ngD3.helpers.chord.classes(pvs.data);
-            pvs.maxResult = _.chain(pvs.data.children)
+
+            arrayValue = _.chain(pvs.data.children)
                 .map(function(d) { return _.map(d.children, function(o) { return o.size; }); })
                 .flattenDeep()
-                .max()
                 .value();
+            pvs.maxResult = _.max(arrayValue);
+            pvs.totalResult = _.sum(arrayValue);
         }
 
         self.supports = ngD3.helpers.generateSupports(self.options.supports, pvs.data, self.options.colors);
@@ -185,14 +189,24 @@ module.exports = function(ngD3) {
             .on('mouseover', _mouseover)
             .on('mouseout', _mouseout);
 
-        g.append('text')
-            .attr('x', 6)
-            .attr('dy', 12)
-            .style('pointer-events', 'none')
-            .filter(function(d) { return d.value > 110; })
-          .append('textPath')
-            .attr('xlink:href', function(d) { return '#group' + d.index + '-' + groupIds; })
-            .text(function(d) { return self.supports[d.index].name; });
+        // On vérifie que le radius soit suffisant pour pouvoir écrire
+        var fontSize;
+        var radius = pvs.outerRadius - pvs.innerRadius;
+
+        if (radius > 15) {
+            fontSize = (radius / 2) > 12 ? 12 : (radius / 2);
+            fontSize = fontSize < 10 ? 10 : fontSize;
+
+            g.append('text')
+                .attr('x', 6)
+                .attr('dy', function() { return (fontSize / 2) + (radius / 2) - 2; })
+                .attr('font-size', fontSize + 'px')
+                .style('pointer-events', 'none')
+                .filter(_filterChordName)
+                .append('textPath')
+                .attr('xlink:href', function(d) { return '#group' + d.index + '-' + groupIds; })
+                .text(function(d) { return self.supports[d.index].name; });
+        }
 
         pvs.svg.append('g')
             .attr('class', 'chord')
@@ -209,6 +223,19 @@ module.exports = function(ngD3) {
         }
 
         _drawTicks();
+    }
+
+    /**
+     * @private
+     * Filtre les categories à renvoyer
+     *
+     * @param  {Object} d
+     * @return {Bool}   isLongEnought
+     */
+    function _filterChordName(d) {
+        var percentOccupied = d.value / pvs.totalResult * 100;
+
+        return self.supports[d.index].name.length < 10 && percentOccupied > 5;
     }
 
     /**
