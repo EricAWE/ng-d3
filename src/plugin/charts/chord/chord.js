@@ -102,7 +102,7 @@ module.exports = function(ngD3) {
             };
 
             pvs.chord.matrix(pvs.matrix);
-            legend.renderMatrix();
+            //legend.renderMatrix();
             self.render();
         }
     }
