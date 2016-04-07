@@ -96,10 +96,10 @@ module.exports = function(ngD3) {
             self.render();
         }
         else {
-            var old = {
-                groups: pvs.chord.groups(),
-                chords: pvs.chord.chords()
-            };
+            // var old = {
+            //     groups: pvs.chord.groups(),
+            //     chords: pvs.chord.chords()
+            // };
 
             pvs.chord.matrix(pvs.matrix);
             //legend.renderMatrix();

@@ -49,18 +49,15 @@ var Helpers = function Helpers() {
      * @return {Array} supports
      */
     function generateSupports(_supports, data, _colors) {
-        var supports = [];
+        var supports = typeof _supports === 'object' ? _supports : [];
         var support = {};
         var colors = _colors || COLORS;
+        var i = 0;
+        var uniques = _getUniquesSupports(data.children);
 
-        if (typeof _supports === 'object') {
-            supports = _supports;
-        }
-        else {
-            var i = 0;
-            var uniques = _getUniquesSupports(data.children);
+        _.forEach(uniques, function(key) {
+            if (!_.find(supports, {key: key})) {
 
-            _.forEach(uniques, function(key) {
                 i = colors.length > i ? i : 0;
                 support = {
                     name: key,
@@ -70,8 +67,8 @@ var Helpers = function Helpers() {
 
                 supports.push(support);
                 i++;
-            });
-        }
+            }
+        });
 
         return supports;
     }
