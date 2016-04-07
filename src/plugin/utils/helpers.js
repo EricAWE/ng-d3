@@ -53,7 +53,7 @@ var Helpers = function Helpers() {
         var support = {};
         var colors = _colors || COLORS;
 
-        if (typeof _supports === 'Object') {
+        if (typeof _supports === 'object') {
             supports = _supports;
         }
         else {

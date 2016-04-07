@@ -75,87 +75,91 @@
 
             var test  = {
                       "chart": "chord",
-                      "data":  {
+                      "data": {
                         "name": "mcf",
                         "children": [{
-                            "name": "cpc",
+                            "name": "SEA",
                             "children": [{
-                                "name": "cpc",
+                                "name": "SEA",
                                 "size": 1240
                             }, {
-                                "name": "organic",
+                                "name": "SEO",
                                 "size": 268
                             }, {
-                                "name": "display",
+                                "name": "Display",
                                 "size": 6
                             }, {
-                                "name": "(none)",
+                                "name": "Direct",
                                 "size": 121
                             }, {
-                                "name": "referral",
+                                "name": "Site Référent",
                                 "size": 20
                             }]
                         }, {
-                            "name": "(none)",
+                            "name": "Direct",
                             "children": [{
-                                "name": "(none)",
+                                "name": "Direct",
                                 "size": 212
                             }, {
-                                "name": "cpc",
+                                "name": "SEA",
                                 "size": 15
                             }, {
-                                "name": "organic",
+                                "name": "SEO",
                                 "size": 8
                             }]
                         }, {
-                            "name": "organic",
+                            "name": "SEO",
                             "children": [{
-                                "name": "organic",
+                                "name": "SEO",
                                 "size": 1534
                             }, {
-                                "name": "cpc",
+                                "name": "SEA",
                                 "size": 128
                             }, {
-                                "name": "(none)",
+                                "name": "Direct",
                                 "size": 150
                             }, {
-                                "name": "referral",
+                                "name": "Site Référent",
                                 "size": 8
                             }, {
-                                "name": "display",
+                                "name": "Display",
                                 "size": 5
                             }]
                         }, {
-                            "name": "display",
+                            "name": "Display",
                             "children": [{
-                                "name": "display",
+                                "name": "Display",
                                 "size": 2
                             }, {
-                                "name": "(none)",
+                                "name": "Direct",
                                 "size": 1
                             }]
                         }, {
-                            "name": "referral",
+                            "name": "Site Référent",
                             "children": [{
-                                "name": "referral",
+                                "name": "Site Référent",
                                 "size": 62
                             }, {
-                                "name": "cpc",
+                                "name": "SEA",
                                 "size": 7
                             }, {
-                                "name": "(none)",
+                                "name": "Direct",
                                 "size": 6
                             }, {
-                                "name": "organic",
+                                "name": "SEO",
                                 "size": 42
                             }]
                         }]
                     },
                       "options": {
                         "supports": [
-                          { "origin" : ["(none)", "cpc"], "rename": "Direct", "color": "blue" },
-                          { "origin" : ["organic"], "rename": "SEO", "color": "green" },
-                          { "origin" : ["referral"], "rename": "Site Référent", "color": "yellow" }
+                            { key: 'Display', name: 'Display', color: '#005c9c' },
+                            { key: 'Direct', name: 'Direct', color: '#f5af05' },
+                            { key: 'SEA', name: 'SEA', color: '#3daadf' },
+                            { key: 'SEO', name: 'SEO', color: '#59da80' },
+                            { key: 'Site Référent', name: 'Site Référent', color: '#8e44ad' },
+                            { key: 'e-mail', name: 'E-mail', color: '#ce0005' },
+                            { key: 'Social', name: 'Social', color: '#5323a6' }
                         ],
                         "legend": {
                             "enable": true,
