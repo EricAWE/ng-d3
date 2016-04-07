@@ -103,7 +103,7 @@ module.exports = function(ngD3) {
 
             pvs.chord.matrix(pvs.matrix);
             legend.renderMatrix();
-            _transition(old);
+            self.render();
         }
     }
 
