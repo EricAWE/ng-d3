@@ -171,7 +171,7 @@
             if (self.element.node()) {
                 d3.select(self.element.node().parentNode)
                     .transition()
-                    .duration(600)
+                    .duration(0)
                     .style('opacity', 1);
             }
         }

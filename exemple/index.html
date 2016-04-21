@@ -74,106 +74,106 @@
             };
 
             var test  = {
-                      "chart": "chord",
-                      "data": {
-                        "name": "mcf",
+                "chart": "chord",
+                "data": {
+                    "name": "mcf",
+                    "children": [{
+                        "name": "SEA",
                         "children": [{
                             "name": "SEA",
-                            "children": [{
-                                "name": "SEA",
-                                "size": 1240
-                            }, {
-                                "name": "SEO",
-                                "size": 268
-                            }, {
-                                "name": "Display",
-                                "size": 6
-                            }, {
-                                "name": "Direct",
-                                "size": 121
-                            }, {
-                                "name": "Site Référent",
-                                "size": 20
-                            }]
-                        }, {
-                            "name": "Direct",
-                            "children": [{
-                                "name": "Direct",
-                                "size": 212
-                            }, {
-                                "name": "SEA",
-                                "size": 15
-                            }, {
-                                "name": "SEO",
-                                "size": 8
-                            }]
+                            "size": 1240
                         }, {
                             "name": "SEO",
-                            "children": [{
-                                "name": "SEO",
-                                "size": 1534
-                            }, {
-                                "name": "SEA",
-                                "size": 128
-                            }, {
-                                "name": "Direct",
-                                "size": 150
-                            }, {
-                                "name": "Site Référent",
-                                "size": 8
-                            }, {
-                                "name": "Display",
-                                "size": 5
-                            }]
+                            "size": 268
                         }, {
                             "name": "Display",
-                            "children": [{
-                                "name": "Display",
-                                "size": 2
-                            }, {
-                                "name": "Direct",
-                                "size": 1
-                            }]
+                            "size": 6
+                        }, {
+                            "name": "Direct",
+                            "size": 121
                         }, {
                             "name": "Site Référent",
-                            "children": [{
-                                "name": "Site Référent",
-                                "size": 62
-                            }, {
-                                "name": "SEA",
-                                "size": 7
-                            }, {
-                                "name": "Direct",
-                                "size": 6
-                            }, {
-                                "name": "SEO",
-                                "size": 42
-                            }]
+                            "size": 20
                         }]
-                    },
-                      "options": {
-                        "supports": [
-                            { key: 'Display', name: 'Display', color: '#005c9c' },
-                            { key: 'Direct', name: 'Direct', color: '#f5af05' },
-                            { key: 'SEA', name: 'SEA', color: '#3daadf' },
-                            // { key: 'SEO', name: 'SEO', color: '#59da80' },
-                            { key: 'Site Référent', name: 'Site Référent', color: '#8e44ad' },
-                            { key: 'e-mail', name: 'E-mail', color: '#ce0005' },
-                            { key: 'Social', name: 'Social', color: '#5323a6' }
+                    }, {
+                        "name": "Direct",
+                        "children": [{
+                            "name": "Direct",
+                            "size": 212
+                        }, {
+                            "name": "SEA",
+                            "size": 15
+                        }, {
+                            "name": "SEO",
+                            "size": 8
+                        }]
+                    }, {
+                        "name": "SEO",
+                        "children": [{
+                            "name": "SEO",
+                            "size": 1534
+                        }, {
+                            "name": "SEA",
+                            "size": 128
+                        }, {
+                            "name": "Direct",
+                            "size": 150
+                        }, {
+                            "name": "Site Référent",
+                            "size": 8
+                        }, {
+                            "name": "Display",
+                            "size": 5
+                        }]
+                    }, {
+                        "name": "Display",
+                        "children": [{
+                            "name": "Display",
+                            "size": 2
+                        }, {
+                            "name": "Direct",
+                            "size": 1
+                        }]
+                    }, {
+                        "name": "Site Référent",
+                        "children": [{
+                            "name": "Site Référent",
+                            "size": 62
+                        }, {
+                            "name": "SEA",
+                            "size": 7
+                        }, {
+                            "name": "Direct",
+                            "size": 6
+                        }, {
+                            "name": "SEO",
+                            "size": 42
+                        }]
+                    }]
+                },
+                "options": {
+                    "supports": [
+                        { key: 'Display', name: 'Display', color: '#005c9c' },
+                        { key: 'Direct', name: 'Direct', color: '#f5af05' },
+                        { key: 'SEA', name: 'SEA', color: '#3daadf' },
+                        // { key: 'SEO', name: 'SEO', color: '#59da80' },
+                        { key: 'Site Référent', name: 'Site Référent', color: '#8e44ad' },
+                        { key: 'e-mail', name: 'E-mail', color: '#ce0005' },
+                        { key: 'Social', name: 'Social', color: '#5323a6' }
+                    ],
+                    "legend": {
+                        "enable": true,
+                        "position": 'right',
+                        "width": 0.5,
+                        "columns": [
+                            {'name': 'relation', 'head': 'Cannaux', 'text-align': 'left'},
+                            {'name': 'value', 'head': 'Transactions', 'text-align': 'center'},
+                            {'name': 'relativeValue', 'head': '% du total', 'text-align': 'center'}
                         ],
-                        "legend": {
-                            "enable": true,
-                            "position": 'right',
-                            "width": 0.5,
-                            "columns": [
-                                {'name': 'relation', 'head': 'Cannaux', 'text-align': 'left'},
-                                {'name': 'value', 'head': 'Transactions', 'text-align': 'center'},
-                                {'name': 'relativeValue', 'head': '% du total', 'text-align': 'center'}
-                            ],
-                            "desc": 'of the total'
-                        }
-                      }
+                        "desc": 'of the total'
                     }
+                }
+            };
 
             var parameters = {
                 chart: 'chord',

@@ -1,9 +1,10 @@
 /* eslint-disable */
 'use strict';
 
-const path    = require('path');
-const gulp    = require('gulp');
-const $       = require('gulp-load-plugins')();
+const path         = require('path');
+const gulp         = require('gulp');
+const runSequence  = require('run-sequence');
+const $            = require('gulp-load-plugins')();
 
 const paths = {
     src : {
@@ -47,3 +48,10 @@ gulp.task('watch', function watch() {
     gulp.watch(paths.src.js + '/*.js', ['browserify']);
     gulp.watch(paths.src.js + '/css/*.css', ['css']);
 });
+
+gulp.task('prod', function prod() {
+    runSequence(
+        'browserify',
+        'css'
+    );
+})
