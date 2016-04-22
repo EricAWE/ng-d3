@@ -150,7 +150,7 @@ module.exports = function(ngD3) {
             .style('fill', function(d) { return _getColor(d.source.index); })
             .attrTween('d', ngD3.helpers.chord.chordTween(pvs.chordSvg, old));
 
-        setTimeout(_drawTicks, 1100);
+        _drawTicks();
 
         // On initialise le tableau si la légende est autorisé
         if (legend.parameters.enable) {
@@ -317,8 +317,7 @@ module.exports = function(ngD3) {
             .attr('transform', function(d) { return d.angle > Math.PI ? 'rotate(180)translate(-16)' : null; })
             .text(function(d) { return d.label; });
 
-        pvs.svg.selectAll('.ticks').transition()
-            .duration(340)
+        pvs.svg.selectAll('.ticks')
             .attr('opacity', 1);
     }
 
@@ -368,6 +367,8 @@ module.exports = function(ngD3) {
             return pvs.width;
         }
 
+        newWidth = newWidth - 10;
+
         pvs.width = newWidth;
         pvs.svg.attr('width', pvs.width);
         d3.select(pvs.svg.node().parentNode).attr('width', pvs.width);
@@ -388,6 +389,8 @@ module.exports = function(ngD3) {
         if (!arguments.length) {
             return pvs.height;
         }
+
+        newHeight = newHeight - 10;
 
         pvs.height = newHeight;
         pvs.svg.attr('height', pvs.height);
